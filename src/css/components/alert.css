@@ -1,0 +1,24 @@
+.isAlert {
+    display: none;
+}
+.alert {
+    width: 450px;
+    height:180px;
+    background-color: #fff;
+    box-shadow: 0px -1px 28px -13px rgb(0 0 0);
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translateY(-50%) translateX(-50%);
+    z-index: 10;
+}
+
+.alert-wrap {
+    display:flex;
+    align-items: center;
+    padding: 30px 30px;
+}
+
+.alert-text {
+    margin-left: 20px;
+}

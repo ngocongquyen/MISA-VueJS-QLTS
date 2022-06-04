@@ -1,0 +1,25 @@
+.bgLicense {
+    background-color: #f4f7ff;
+}
+
+.m-dialog-content-title {
+    margin: 0 16px;
+    padding: 10px 0;
+    font-size:16px;
+}
+
+.m-dialog-label-license {
+    opacity: 0.8;
+}
+
+.m-license-search {
+    margin: 0 16px;
+    background-color: #fff;
+    padding:16px;
+    display: flex;
+    justify-content:space-between;
+}
+
+#widthLicense {
+    width: 900px;
+}

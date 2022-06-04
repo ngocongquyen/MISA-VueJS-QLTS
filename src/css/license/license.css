@@ -1,0 +1,17 @@
+.content-title {
+    display: flex;
+    align-items: center;
+    justify-content:space-between;
+    margin: 0 23px 0 20px;
+}
+
+.content-title  h3{
+    font-size:20px;
+}
+#m-license-input {
+    min-width: 280px;
+}
+
+.content-body {
+    padding:0 23px 0 20px;
+}

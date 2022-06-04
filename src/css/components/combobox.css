@@ -1,0 +1,182 @@
+.d-none {
+  display: none;
+}
+
+.m-combobox, .m-dialog-combobox {
+  background-color: #ffffff;
+  border-radius: 2.5px;
+  /* border: 1px solid #afafaf; */
+  height: 36px;
+  position: relative;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+}
+
+.m-dialog-combobox {
+  border: none;
+}
+.m-dialog-combobox {
+  width: 100%;
+}
+
+.m-combobox .m-input {
+  max-width: 219px;
+  height:36px;
+}
+
+.m-dialog-combobox .m-input:focus {
+  border: 1px solid #1aa4c8;
+}
+
+
+/* .m-combobox .m-input:focus {
+  border: none !important;
+  outline: none;
+} */
+
+/* .m-combobox .m-input:hover {
+  border: none !important;
+  outline: none;
+} */
+
+
+.m-combobox .m-combobox-icon, .m-dialog-combobox .m-combobox-icon {
+  border: none; 
+  /* margin: 15px 12px 15px 0; */
+  cursor: pointer;
+  flex-shrink: 0;
+  display:flex;
+  flex-direction: column;
+  position: absolute;
+  right: 12px;
+}
+
+.m-input-combobox-wrap {
+  display:flex;
+  align-items: center;      
+}
+
+.m-combobox .m-combobox-data, .m-dialog-combobox .m-combobox-data {
+  width: 100%;
+  position: absolute;
+  top: 105%;
+  background-color: #fff;
+  box-shadow: 1px 1px 4px #bbb;
+  z-index: 2;
+  max-height: 120px;
+  overflow-y: scroll;
+}
+
+.m-combobox .m-combobox-data .m-combobox-item, 
+.m-dialog-combobox .m-combobox-data .m-combobox-item {
+  display: flex;
+  align-items: center;
+  height: 40px;
+  padding-left: 36px;
+}
+
+.m-combobox .m-combobox-data .m-combobox-item:hover,
+.m-dialog-combobox .m-combobox-data .m-combobox-item:hover {
+  background-color: #e9ebee;
+}
+
+.m-combobox .m-combobox-data .m-combobox-item.m-combobox-selected,
+.m-dialog-combobox .m-combobox-data .m-combobox-item.m-combobox-selected {
+  background-color: #019160;
+  color: #fff;
+  background-image: url(../../assets/icon/btn-next-page.svg);
+  background-size: 16px 16px;
+  background-repeat: no-repeat;
+  background-position: 10px center;
+}
+
+::placeholder {
+    font-size: 13px;
+}
+
+.m-combobox:nth-child(2) {
+  margin: 0 16px 0 8px;
+}
+
+
+.control_wrapper {
+  display: flex;
+  position: relative;
+  border: 1px solid #afafaf;
+  border-radius: 2.5px;
+}
+
+.control_wrapper:focus {
+  border: 1px solid yellow !important;
+}
+
+.control_wrapper span {
+  border: none;
+  outline: none;
+}
+.e-input-group:not(.e-float-icon-left),.e-input-group.e-control-wrapper:not(.e-float-icon-left) {
+    border:none;
+}
+
+.e-input-group input.e-input, .e-input-group.e-control-wrapper input.e-input {
+  min-height: 26px !important;
+  padding-left:14px !important;
+}
+.e-input-group, .e-input-group.e-control-wrapper {
+  margin-bottom: 0;
+  border-radius: 2.5px;
+}
+.e-ddl.e-input-group.e-control-wrapper .e-ddl-icon::before {
+  content: '' !important;
+  background: url('../../assets/icon/qlts-icon.png') no-repeat -72px -338px;
+	width: 8px;
+	height: 5px;
+  font-family: 'e-icons';
+  position: absolute;
+  right: 12px;
+  
+}
+
+.e-ddl.e-input-group.e-control-wrapper.e-input-focus::before,
+.e-ddl.e-input-group.e-control-wrapper.e-input-focus::after {
+  display: none;
+  border: none;
+  outline: none;
+  padding-left:14px !important;
+}
+
+.e-input-focus {
+  display: none;
+  border: none;
+  outline: none;
+}
+
+.e-input-group input.e-input:focus, .e-input-group.e-control-wrapper input.e-input:focus,
+.e-input-group.e-input-focus  input.e-input, .e-input-group.e-control-wrapper.e-input-focus input.e-input {
+  padding:4px 0 4px 14px;
+}
+
+input.e-input::selection, textarea.e-input::selection, .e-input-group input.e-input::selection, .e-input-group.e-control-wrapper input.e-input::selection, .e-float-input input::selection, .e-float-input.e-control-wrapper input::selection, .e-input-group textarea.e-input::selection, .e-input-group.e-control-wrapper textarea.e-input::selection, .e-float-input textarea::selection, .e-float-input.e-control-wrapper textarea::selection {
+  background: #1aa4c8;
+  color: unset;
+}
+
+.e-input-group .e-control-wrapper .e-ddl .e-input-focus {
+  border:none !important;
+  outline: none !important;
+}
+
+.e-input-group .e-control-wrapper .e-ddl {
+  border:none !important;
+  outline: none !important;
+}
+
+.control_wrapper span{
+  border:none !important;
+  margin-bottom: 0 !important;
+  margin-top: 0 !important;
+}
+.m-combobox-filter {
+  width: 219px;
+}

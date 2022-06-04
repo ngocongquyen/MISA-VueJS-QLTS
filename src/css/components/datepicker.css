@@ -1,0 +1,40 @@
+.dp__input_icon {
+  right: 0 !important;
+}
+.dp__input_icons {
+  display: none !important;
+}
+
+.dp__input {
+    border: 1px solid #afafaf;
+    border-radius: 2.5px;
+    padding:0;
+    font-size: 13px;
+    height:36px;
+    outline:none !important;
+} 
+
+.dp__input_icon_pad {
+  padding-left: 14px;
+}
+
+.datepicker-container {
+  height: 36px;
+  width: 100%;
+  position: relative;
+  box-sizing: border-box;
+}
+
+.dp__input_focus {
+  border: 1px solid #22a7ca !important;
+}
+
+.datepicker-container .datepicker-icon {
+  background: url("../../assets/icon/qlts-icon.png") no-repeat -287px -67px;
+  width: 18px;
+  height: 18px;
+  position: absolute;
+  right: 12px;
+  top: 25%;
+}
+

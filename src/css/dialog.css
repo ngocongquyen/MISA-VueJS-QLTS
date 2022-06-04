@@ -1,0 +1,83 @@
+.ishow-dialog {
+    display: block;
+}
+
+.m-dialog {
+    background-color: #fff;
+    box-sizing: border-box;
+}
+
+.m-dialog-header {
+    display: flex;
+    padding:0 16px;
+    justify-content:space-between;
+}
+
+.m-dialog-header-title {
+    margin:20px 0;
+}
+
+.m-dialog-content {
+    margin:0 16px;
+}
+
+.m-dialog-left {
+    width: 30%;
+    margin: 0 16px;
+}
+
+.m-dialog-col {
+
+}
+
+.m-dialog-label {
+    color: #000;
+    font-family: MISA font Medium;
+    display: flex;
+    margin-bottom: 8px;
+}
+
+.m-dialog-infor-enter {
+    
+}
+
+.m-dialog-infor-enter .m-input:focus {
+    border:1px solid #019160;
+}
+
+.m-dialog-right {
+    width: 70%;
+    margin-right: 16px;
+}
+
+.m-dialog-footer {
+    height: 52px;
+    background-color: #E9EBEE;
+    text-align: right;
+    line-height: 52px;
+    margin-top: 20px;
+    position:sticky;
+    bottom: 0;
+}
+
+.requied {
+    color: #FF4747;
+    margin-left: 4px;
+}
+
+.row {
+    display: flex;
+    width: 100%;
+}
+
+.col-4 {
+    width: 32%;
+}
+
+.col-8 {
+    width: 66%;
+}
+
+.col-12 {
+    width: 100%;
+}

@@ -1,0 +1,192 @@
+@import url(./components/header.css);
+@import url(./components/content.css);
+@import url(./components/button.css);
+@import url(./components/input.css);
+@import url(./components/filter.css);
+@import url(./components/combobox.css);
+@import url(./components/pagination.css);
+@import url(./components/toast-message.css);
+@import url(./components/modal.css);
+@import url(./components/icon.css);
+@import url(./dialog.css);
+@import url(./employee.css);
+@import url(./table.css);
+@import url(./components/checkbox.css);
+@import url(./components/navbar.css);
+@import url(./components/alert.css);
+@import url(./components/datepicker.css);
+@import url(./components/loading.css);
+/* @import url(./components/chip-status.css);
+@import url(./components/toast-message.css);
+@import url(./components/pop-up.css); */
+
+body {
+    font-family: MISA Font;
+    font-size:13px;
+    margin: 0;
+    box-sizing: border-box;
+    padding:0;
+}
+
+@font-face {
+    font-family: MISA Font;
+    src: url(../assets/font/Roboto/Roboto-Regular.ttf);
+}
+
+@font-face {
+    font-family: MISA Font Bold;
+    src: url(../assets/font/Roboto/Roboto-Bold.ttf);
+}
+
+@font-face {
+    font-family: MISA Font Italic;
+    src: url(../assets/font/Roboto/Roboto-Italic.ttf);
+}
+
+@font-face {
+    font-family: MISA font Medium;
+    src: url(../assets/font/Roboto/Roboto-Medium.ttf);
+}
+
+.m-row {
+    width: 100%;
+}
+
+.mg-top-4 {
+    margin-top:4px;
+}
+
+.mg-left-8 {
+    margin-left:8px;
+}
+
+.mg-right-8 {
+    margin-right:8px;
+}
+
+.mg-left-6 {
+    margin-left:6px;
+}
+
+.mg-top-16 {
+    margin-top:16px;
+}
+
+.mg-right-16 {
+    margin-right:16px;
+}
+
+.mg-right-10 {
+    margin-right:10px;
+}
+
+.mg-right-12 {
+    margin-right:12px;
+}
+
+.mg-left-15 {
+    margin-left:15px;
+}
+
+.mg-bottom-8 {
+    margin-bottom: 8px;
+}
+
+.pg-left-20 {
+    padding-left: 20px;
+}
+
+::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+    scroll-padding: 20px;   
+}
+
+.outer::-webkit-scrollbar-track {
+    margin-block: 40px 0; 
+}
+
+.modal__body::-webkit-scrollbar-track {
+    margin-block: 0 60px; 
+}
+
+
+::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius:10px;
+}  
+
+::-webkit-scrollbar-thumb {
+    background: #888; 
+    border-radius:10px;
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.m-border {
+    border: 1px solid #afafaf;
+}
+
+.text-right {
+    text-align: right;
+}
+
+.text-center {
+    text-align: center;
+}
+
+.padding-16 {
+    padding-left: 16px;
+    padding-right: 16px
+} 
+
+.text-right {
+    text-align: right;
+}
+
+.m-w-50 {
+    width: 50%;
+}
+
+.m-flex {
+    display: flex;
+    align-items:center;
+}
+
+.m-icon-24 {
+    width: 24px;
+    height: 24px;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content:center;
+    cursor: pointer;
+}
+
+.mg-right-20 {
+    margin-right:20px;
+}
+
+.mg-auto {
+    margin: auto;
+}
+
+.text-bold {
+    font-weight: bold;
+}
+
+.pg-rg-30 {
+    padding-right: 30px;
+}
+
+.danger {
+    border: 1px solid red;
+}
+
+.bg-white {
+    background-color: #fff;
+}

@@ -1,0 +1,82 @@
+.right {
+    width: 100%;
+}
+
+.header {
+    height:44px;
+    display: flex;
+    justify-content:space-between;
+    align-items:center;
+    background-color: #fff;
+}
+
+.header-left {
+    padding-left: 20px;
+    background-repeat: no-repeat;
+    display: flex;
+    height: 100%;
+    align-items: center;
+}
+
+/* .header-left-icon {
+    background-image: url(../../assets/icon/btn-prev-page.svg);
+    width: 20px;
+    height: 20px;
+    background-repeat: no-repeat;
+    transform: rotate(270deg);
+    background-position: center;
+    flex-shrink: 0;
+} */
+.header-title {
+    margin: 14px 0;
+    font-weight: 700;
+}
+
+.header-right {
+    display: flex;
+    align-items: center;
+}
+
+.header-right p {
+    font-weight: 500;
+    color: #001031;
+    margin:auto 14px auto 0;;
+}
+
+.header-icon {
+    display:flex;
+    align-items: center;
+    margin-right: 23px;
+    height: 44px;
+}
+
+.header-right-icon {
+    width: 24px;
+    height: 24px;
+    flex-shrink: 0;
+    margin: 10px 20px 10px 0;
+    cursor: pointer;
+}
+
+.header-right-icon-choose {
+    background: url('../../assets/icon/qlts-icon.png') no-repeat -204px -332px;
+    width: 10px;
+    height: 18px;
+    margin: 0 8px 0 0;
+}
+
+.header-right-icon:nth-child(4) {
+    margin-right:0;
+}
+.header-right-icon-down {
+    background: url('../../assets/icon/qlts-icon.png') no-repeat -72px -338px;
+    width: 7px;
+    height: 5px;
+    flex-shrink: 0;
+    margin:20px 23px 20px 9px;
+}
+
+.header-right-wrap {
+    display: flex;
+    align-items: center;
+}
