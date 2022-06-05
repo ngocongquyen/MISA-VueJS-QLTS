@@ -110,7 +110,7 @@
                 <th class="text-right" style="min-width: 120px">
                   Giá trị còn lại
                 </th>
-                <th class="text-center" style="min-width: 100px">Chức năng</th>
+                <th class="text-center" style="min-width: 100px;padding-left:20px">Chức năng</th>
               </tr>
             </thead>
             <MISALoading v-if="isLoading" />
@@ -807,8 +807,8 @@ export default {
      * Created date: 16:06 25/04/2022
      */
     async btnAddOnClick() {
-      // this.titlePage = "Thêm tài sản";
-      // this.formMode = this.enum.Add;
+      this.titlePage = "Thêm tài sản";
+      this.formMode = this.enum.Add;
       // reset lại form
       this.resetForm();
       // tự động sinh mã nhân viên mới

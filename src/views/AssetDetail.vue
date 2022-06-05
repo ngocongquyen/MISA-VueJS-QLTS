@@ -64,7 +64,7 @@
                 @getComboSelected="getDepartment"
                 @changeCombobox="changeCombobox"
                 :maxLength="50"
-                @change="changeCode"
+               
               />
             </div>
             <div class="m-dialog-col mg-top-16 col-8">
@@ -240,7 +240,10 @@
               >
               <MISADatepicker
                 @getDate="(newValue) => (this.asset.PurchaseDate = newValue)"
-                :control="this.asset.PurchaseDate"
+                :control="asset.PurchaseDate"
+                :tag="'PurchaseDate'"
+                :fileName="'Ngày mua'"
+                ref="PurchaseDate"
               />
               <!-- <div class="datepicker-container">
                 <Datepicker
@@ -262,7 +265,10 @@
               >
               <MISADatepicker
                 @getDate="(newValue) => (this.asset.UseDate = newValue)"
-                :control="this.asset.UseDate"
+                :control="asset.UseDate"
+                :tag="'UseDate'"
+                :fileName="'Ngày bắt đầu sử dụng'"
+                ref="UseDate"
               />
               <!-- <div class="datepicker-container">
                 <Datepicker
@@ -594,11 +600,13 @@ export default {
     },
 
     focusError(arrayError) {
+      console.log(arrayError);
       if (arrayError.length > 0) {
         for (let key of Object.entries(this.$refs)) {
           // Duyệt qua các trường rỗng
           // Nếu có chứa thì chọc vào prop của MISAInput
           if (key[0].toLowerCase().includes(arrayError[0].toLowerCase())) {
+            console.log(this.$refs[key[0]]);
             this.$refs[key[0]].setFocus();
           }
         }
@@ -614,10 +622,12 @@ export default {
     checkIsEmpty() {
       // Lấy các thuộc tính.
       const object = this.asset;
+      console.log("this",this.asset);
       // chứa tên các lỗi khi rỗng.
       this.arrayContainsEmptyName = [];
       // chứa các trường rỗng.
       this.isFieldEmpty = [];
+      console.log("Line 624",this.asset.PurchaseDate);
       var check = false;
       // Duyệt qua các trường
       for (let property in object) {
@@ -745,7 +755,8 @@ export default {
         if (this.enum.Add == this.formMode) {
           this.asset.CreatedDate = new Date();
           this.asset.ModifiedDate = new Date();
-          console.log("Line 495", this.asset);
+          console.log("Line 748",this.asset.UseDate);
+          console.log("Line 749",this.asset.PurchaseDate);
           await axios
             .post("http://localhost:5062/api/v1/FixedAssets", this.asset)
             .then((res) => {
@@ -760,7 +771,7 @@ export default {
               console.log(res);
             })
             .catch((response) => {
-              console.log("Line 484", response.response.data);
+              console.log("Line 763", response.response.data);
               var statusCode = response.request.status;
               var data = response.response.data;
               me.checkValidateBackend(statusCode, data, btnName);
@@ -770,6 +781,7 @@ export default {
         }
         // Sửa tài sản
         if (this.enum.Edit == this.formMode) {
+          console.log("abc");
           this.asset.ModifiedDate = new Date();
           await axios
             .put(
@@ -784,6 +796,7 @@ export default {
               me.$emit("search");
             })
             .catch(function (response) {
+              console.log("Line 787", response.response.data);
               var statusCode = response.request.status;
               var data = response.response.data;
               me.checkValidateBackend(statusCode, data, btnName);

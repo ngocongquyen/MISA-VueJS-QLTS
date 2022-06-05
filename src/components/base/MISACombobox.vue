@@ -117,7 +117,6 @@ export default {
          // Nếu không có nameFixedAssetCategory
          else {
           if ($event.itemData != null) {
-            console.log("Line 118",$event.itemData);  
             changeNameCombobox = $event.itemData.FixedAssetCategoryCode;
           }
         }

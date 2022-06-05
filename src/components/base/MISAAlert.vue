@@ -85,7 +85,7 @@ export default {
     MISAButton,
   },
   mounted() {
-    // this.$refs.btn.setFocusBtn();
+    
   },
   props: ["isAlert", "alertBody", "typeAlert"],
   watch: {
@@ -133,6 +133,7 @@ export default {
      * Created date: 23:04 20/05/2022
      */
     btnNoDelete() {
+      // Gửi lỗi lên TheContent
       this.$emit("focusError");
       this.$emit("isShowAlert", true);
     },
