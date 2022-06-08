@@ -8,9 +8,10 @@
 }
 
 .asset .outer {
-  height: calc(100% - 40px);
+  height: calc(100% - 50px);
   overflow: auto;
-  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.16);
+  width: 100%;
+  /* box-shadow: 0 3px 10px rgba(0, 0, 0, 0.16); */
   background-color: #fff;
   position: relative;
 }
@@ -68,8 +69,9 @@ table tbody tr:hover td {
   background-color: rgba(26, 164, 200, 0.2);
 }
 
-.asset tr:hover .btn-feature {
-  display: block;
+tr:hover .btn-feature {
+  display: flex;
+  align-items: center;
 }
 
 .asset table tr:first-child th:first-child {
@@ -114,21 +116,20 @@ table tbody tr td:first-child {
 }
 
 .license .grid {
-  height: 278px;
   box-sizing: border-box;
-  overflow: auto;
   position: relative;
 }
 
 .license .outer {
   overflow: auto;
-  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.16);
+  height: 200px;
+  /* box-shadow: 0 3px 10px rgba(0, 0, 0, 0.16); */
   background-color: #fff;
   position: relative;
 }
 
 
-.license table tr th {
+.license table tr th, .license-detail table tr th{
   background-color: #f5f5f5;
   text-align: left;
   height: 38px;
@@ -138,4 +139,13 @@ table tbody tr td:first-child {
 .license table tr:first-child th:first-child {
   padding-left: 16px;
   padding-right: 20px;
+}
+
+.m-table-container {
+  width: 100%;
+  overflow-x: auto;
+}
+
+.license tfoot tr td{
+  background-color: #f5f5f5;
 }

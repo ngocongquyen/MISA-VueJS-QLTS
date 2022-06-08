@@ -39,7 +39,9 @@
             </div>
           </div>
           <div class="navbar-dropdown">
-            <router-link to="/license"  class="navbar-link">Ghi tăng</router-link>
+            <router-link to="/license" class="navbar-link"
+              >Ghi tăng</router-link
+            >
             <div class="m-icon-24">
               <div class="navbar-icon-down"></div>
             </div>
@@ -130,18 +132,30 @@
 export default {
   name: "TheNavbar",
   props: [],
+  mounted() {
+    const navbarLink = document.querySelectorAll(".navbar-item");
+    navbarLink.forEach((element) => {
+      element.onclick = function () {
+        document
+          .querySelector(".navbar-item.navbar-link-selected")
+          .classList.remove("navbar-link-selected");
+        this.classList.add("navbar-link-selected");
+      };
+    });
+  },
   components: {},
 
   methods: {
     /**
-    * Mô tả : đóng mở navbar 
-    * @param
-    * @return
-    * Created by: QuyenNC
-    * Created date: 13:39 22/04/2022
-    */
+     * Mô tả : đóng mở navbar
+     * @param
+     * @return
+     * Created by: QuyenNC
+     * Created date: 13:39 22/04/2022
+     */
     btnToggleOnClick() {
       this.isWidth = !this.isWidth;
+      this.$emit("isWidth", this.isWidth);
       if (this.isWidth === true) {
         document.querySelector(".navbar-name-logo").style.display = "none";
         var hideNavBar = document.querySelectorAll(".navbar-dropdown");
@@ -149,13 +163,13 @@ export default {
           hideNavBar[index].style.display = "none";
         }
       } else {
-          document.querySelector(".navbar-name-logo").style.display = "block";
+        document.querySelector(".navbar-name-logo").style.display = "block";
         var showNavBar = document.querySelectorAll(".navbar-dropdown");
         for (let index = 0; index < showNavBar.length; index++) {
           showNavBar[index].style.display = "flex";
         }
       }
-      this.isIconToggle = !this.isIconToggle ;
+      this.isIconToggle = !this.isIconToggle;
     },
   },
 

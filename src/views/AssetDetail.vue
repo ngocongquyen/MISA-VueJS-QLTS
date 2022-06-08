@@ -64,7 +64,6 @@
                 @getComboSelected="getDepartment"
                 @changeCombobox="changeCombobox"
                 :maxLength="50"
-               
               />
             </div>
             <div class="m-dialog-col mg-top-16 col-8">
@@ -324,6 +323,7 @@ import "@vuepic/vue-datepicker/dist/main.css";
 // import MISAInput from "../components/base/MISAInput.vue";
 
 // import Datepicker from 'vuejs3-datepicker';
+
 export default {
   name: "AssetDetail",
   mounted() {
@@ -406,24 +406,21 @@ export default {
 
   methods: {
     /**
-    * Mô tả : Thay đổi các giá trị tương ứng khi DepartmentCode rỗng và FixedAssetCategoryCode rỗng
-    * @param
-    * @return
-    * Created by: QuyenNC
-    * Created date: 16:25 03/06/2022
-    */
+     * Mô tả : Thay đổi các giá trị tương ứng khi DepartmentCode rỗng và FixedAssetCategoryCode rỗng
+     * @param
+     * @return
+     * Created by: QuyenNC
+     * Created date: 16:25 03/06/2022
+     */
     changeCombobox(code, tag) {
       if (tag === "DepartmentCode" && code === "") {
-
-          this.asset.DepartmentCode = "";
-          this.asset.DepartmentName = "";
-
+        this.asset.DepartmentCode = "";
+        this.asset.DepartmentName = "";
       } else if (tag === "FixedAssetCategoryCode" && code === "") {
-           this.asset.FixedAssetCategoryCode = "";
-          this.asset.FixedAssetCategoryName = "";
-          this.asset.LifeTime = "";
-          this.asset.DepreciationRate=0;
-
+        this.asset.FixedAssetCategoryCode = "";
+        this.asset.FixedAssetCategoryName = "";
+        this.asset.LifeTime = "";
+        this.asset.DepreciationRate = 0;
       }
     },
     /**
@@ -436,7 +433,6 @@ export default {
     upAnDownQuantity($event) {
       switch ($event.keyCode) {
         case 38:
-
           this.asset.Quantity++;
 
           break;
@@ -572,30 +568,32 @@ export default {
      */
     checkDepreciationRate() {
       var check = false;
-      if (this.asset.LifeTime == 0 && this.asset.DepreciationRate==0) {
-        console.log("abc");
+      if (this.asset.LifeTime == 0 && this.asset.DepreciationRate == 0) {
         check = true;
+      } else {
+        if (Number.isInteger(1 / this.asset.LifeTime)) {
+          if (
+            Number(this.asset.DepreciationRate) !=
+            Number((1 / this.asset.LifeTime) * 100)
+          ) {
+            return check;
+          } else {
+            check = true;
+          }
+        } else {
+          if (         
+            Number(this.asset.DepreciationRate) !=
+            Number(((1 / this.asset.LifeTime) * 100).toFixed(2))
+          ) {
+            console.log(Number(this.asset.DepreciationRate));
+            console.log(Number(((1 / this.asset.LifeTime) * 100).toFixed(2)));
+            return false;
+          } else {
+            check = true;
+          }
+        }
       }
 
-      if (Number.isInteger(1 / this.asset.LifeTime)) {
-        if (
-          Number(this.asset.DepreciationRate) !=
-          Number((1 / this.asset.LifeTime) * 100)
-        ) {
-          return check;
-        } else {
-          check = true;
-        }
-      } else {
-        if (
-          Number(this.asset.DepreciationRate) !=
-          Number(((1 / this.asset.LifeTime) * 100).toFixed(2))
-        ) {
-          return false;
-        } else {
-          check = true;
-        }
-      }
       return check;
     },
 
@@ -622,12 +620,12 @@ export default {
     checkIsEmpty() {
       // Lấy các thuộc tính.
       const object = this.asset;
-      console.log("this",this.asset);
+      console.log("this", this.asset);
       // chứa tên các lỗi khi rỗng.
       this.arrayContainsEmptyName = [];
       // chứa các trường rỗng.
       this.isFieldEmpty = [];
-      console.log("Line 624",this.asset.PurchaseDate);
+    
       var check = false;
       // Duyệt qua các trường
       for (let property in object) {
@@ -705,6 +703,7 @@ export default {
      * Created date: 08:14 22/04/2022
      */
     async btnSaveOnClick() {
+      console.log(this.formMode);
       const me = this;
       // Lấy ra năm ngày sử dụng
       var yearUseDate = moment(this.asset.UseDate).format("yy");
@@ -755,8 +754,8 @@ export default {
         if (this.enum.Add == this.formMode) {
           this.asset.CreatedDate = new Date();
           this.asset.ModifiedDate = new Date();
-          console.log("Line 748",this.asset.UseDate);
-          console.log("Line 749",this.asset.PurchaseDate);
+          console.log("Line 748", this.asset.UseDate);
+          console.log("Line 749", this.asset.PurchaseDate);
           await axios
             .post("http://localhost:5062/api/v1/FixedAssets", this.asset)
             .then((res) => {

@@ -1,7 +1,7 @@
 <template>
   <div class="main">
-    <TheNavbar />
-    <div class="right">
+    <TheNavbar @isWidth="isWidth"/>
+    <div class="right" :style="this.resizeWidth == true ? 'width: calc(100% - 66px)' : 'width: calc(100% - 220px)'" >
       <TheHeader />
        <router-view></router-view>
     </div>
@@ -21,6 +21,16 @@ export default {
     TheNavbar,
     TheHeader,
     ThePageRight,
+  },
+  methods: {
+    isWidth(isWidth) {
+      this.resizeWidth = isWidth;
+    }
+  },
+  data() {
+    return {
+      resizeWidth : false,
+    }
   },
 };
 </script>

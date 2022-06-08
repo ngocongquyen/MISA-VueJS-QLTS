@@ -16,6 +16,7 @@
 @import url(./components/alert.css);
 @import url(./components/datepicker.css);
 @import url(./components/loading.css);
+@import url(./components/tooltip.css);
 /* @import url(./components/chip-status.css);
 @import url(./components/toast-message.css);
 @import url(./components/pop-up.css); */
@@ -97,7 +98,7 @@ body {
 }
 
 ::-webkit-scrollbar {
-    width: 10px;
+    width: 4px;
     height: 10px;
     scroll-padding: 20px;   
 }
@@ -106,10 +107,22 @@ body {
     margin-block: 40px 0; 
 }
 
+.outer::-webkit-scrollbar {
+    height:0;
+}
+
+.license-detail .outer::-webkit-scrollbar {
+    height:4px;
+}
+
 .modal__body::-webkit-scrollbar-track {
     margin-block: 0 60px; 
 }
 
+body::-webkit-scrollbar{
+    height:0;
+    width: 0;
+}
 
 ::-webkit-scrollbar-track {
     background: #f1f1f1;
@@ -189,4 +202,9 @@ input::-webkit-inner-spin-button {
 
 .bg-white {
     background-color: #fff;
+    padding-left: 16px;
+}
+
+.pb-20 {
+    padding-bottom: 20px;
 }

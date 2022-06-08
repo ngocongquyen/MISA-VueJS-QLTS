@@ -4,13 +4,13 @@ import TheLogin from "../components/layout/TheLogin.vue";
 import TheMain from "../components/layout/TheMain.vue";
 import TheContent from "../components/layout/TheContent.vue";
 import TheLicense from "../components/layout/TheLicense.vue";
-import axios from "axios";
+import store from "../router/store";
 // import store from "./store";
 const routes = [
   {
-    path: "/trangchu",
+    path: "/asset",
     component: TheMain,
-    name: "trangchu",
+    name: "main",
     meta: {
       requiresAuth: true,
     },
@@ -33,6 +33,7 @@ const routes = [
     path: "/",
     component: TheLogin,
     name: "Login",
+    meta: { guest: true },
   },
 
 ];
@@ -43,39 +44,26 @@ const router = createRouter({
   routes, // short for `routes: routes`
 });
 
-axios.defaults.withCredentials = true;
 router.beforeEach(async (to, from, next) => {
-  // const { isAuthentication } = store.getters;
-  // next-line: check if route ("to" object) needs authenticated
-  if (to.matched.some((record) => record.meta.requiresAuth)) {
-    await axios
-      .get("http://localhost:5062/api/v1/Users")
-      .then(function (res) {
-        console.log(res);
-        next();
-      })
-      .catch(async function () {
-        next({ path: "/" });
-      });
+
+  if (to.matched.some((record) => record.meta.requiresAuth)){
+      if (store.getters.isAuthentication) {
+          next();
+          return;
+      }
+      next("/");
   } else next();
 });
-// router.beforeEach(async (to, from, next) => {
-//   const { isAuthentication } = store.getters;
-//   // next-line: check if route ("to" object) needs authenticated
-//   if (to.matched.some((record) => record.meta.requiresAuth) && isAuthentication == false) {
-//     next('/');
-//   } else if (isAuthentication == true) {
-//     switch (to.name) {
-//       case 'Login'  :
-//         next({ path: '/' });
-//         break;
-//       case 'trangchu':
-//         next();
-//         break;
-//       default:
-//         next();
-//         break;
-//     }
-//   } else next();
-// });
+
+router.beforeEach((to, from, next) => {
+  if (to.matched.some((record) => record.meta.guest)) {
+      if (store.getters.isAuthentication) {
+          next("/asset");
+          return;
+      }
+      next();
+  } else {
+      next();
+  }
+});
 export default router;

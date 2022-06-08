@@ -67,7 +67,7 @@ export default {
   data() {
     return {
       isImport: false,
-      content: 0,
+      content: "",
       field: "",
     };
   },

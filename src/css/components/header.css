@@ -1,6 +1,6 @@
-.right {
-    width: 100%;
-}
+    /* .right {
+        width: calc(100% - 220px);
+    } */
 
 .header {
     height:44px;

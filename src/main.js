@@ -13,6 +13,7 @@ import MISADatepicker from "./components/base/MISADatepicker.vue"
 import router from "./router/index"
 import store from "./router/store"
 
+
 // Registering Syncfusion license key
 registerLicense(
   'ORg4AjUWIQA/Gnt2VVhhQlFac1pJWnxLYVF2R2FJe1RwcF9CYkwgOX1dQl9hSXhTdEVnWXlbcHRVQmA='
@@ -31,6 +32,17 @@ app.component("MISADatepicker",MISADatepicker);
 
 app.use(router);
 app.use(store);
+
+// axios.interceptors.response.use(undefined, function(error) {
+//   if (error) {
+//     const originalRequest = error.config;
+//     if (error.response.status === 404 && !originalRequest._retry) {
+//       originalRequest._retry = true;
+//       store.dispatch("logout");
+//       return router.push("/");
+//     }
+//   }
+// });
 
 // app.component('MISACheckBox',MISACheckBox);
 app.mount('#app');

@@ -54,13 +54,13 @@ body {
 }
 
 .input-login {
-    width: 100%;
-    height: 44px;
-    padding: 0px 20px;
-    margin-top: 16px;
-    border-radius: 4px;
+    width: 100% !important;
+    height: 44px !important;
+    padding: 0px 20px !important;
+    margin-top: 16px !important;
+    border-radius: 4px !important;
     outline: none;
-    border: 1px solid #dadce0;
+    border: 1px solid #dadce0 !important;
     font-size: 13px;
     /* align-items: center; */
     box-sizing: border-box;

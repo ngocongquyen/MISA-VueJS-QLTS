@@ -66,7 +66,6 @@
             :textButton="'+ Thêm tài sản'"
             v-shortkey="['ctrl', 'alt', 'a']"
             @shortkey="btnAddOnClick"
-            
           >
           </MISAButton>
           <div class="filter-right-container">
@@ -87,7 +86,21 @@
         </div>
       </div>
       <div class="grid">
-        <div class="outer">
+        <div
+          class="outer"
+          ref="MainTable"
+          @scroll="
+            this.$refs.FooterTable.scrollLeft = this.$refs.MainTable.scrollLeft
+          "
+        >
+          <!-- <div
+            class="m-table-container"
+            ref="MainTable"
+            @scroll="
+              this.$refs.FooterTable.scrollLeft =
+                this.$refs.MainTable.scrollLeft
+            "
+          > -->
           <table>
             <thead>
               <tr>
@@ -100,8 +113,12 @@
                 <th>STT</th>
                 <th style="padding-left: 25px; min-width: 180px">Mã tài sản</th>
                 <th style="min-width: 170px">Tên tài sản</th>
-                <th style="min-width: 160px;padding-left:20px">Loại tài sản</th>
-                <th style="min-width: 160px; padding-left:20px">Bộ phận sử dụng</th>
+                <th style="min-width: 160px; padding-left: 20px">
+                  Loại tài sản
+                </th>
+                <th style="min-width: 160px; padding-left: 20px">
+                  Bộ phận sử dụng
+                </th>
                 <th class="text-right" style="min-width: 60px">Số lượng</th>
                 <th class="text-right" style="min-width: 120px">Nguyên giá</th>
                 <th class="text-right" style="min-width: 120px">
@@ -110,7 +127,12 @@
                 <th class="text-right" style="min-width: 120px">
                   Giá trị còn lại
                 </th>
-                <th class="text-center" style="min-width: 100px;padding-left:20px">Chức năng</th>
+                <th
+                  class="text-center"
+                  style="min-width: 100px; padding-left: 20px"
+                >
+                  Chức năng
+                </th>
               </tr>
             </thead>
             <MISALoading v-if="isLoading" />
@@ -129,11 +151,21 @@
                 </td>
                 <td style="text-align: center">{{ index + 1 }}</td>
                 <td style="padding-left: 25px">{{ asset.FixedAssetCode }}</td>
-                <td class="textLong" style="max-width:170px"> {{ asset.FixedAssetName }}</td>
-                <td class="textLong" style="max-width:160px;padding-left: 20px">
+                <td class="textLong" style="max-width: 170px">
+                  {{ asset.FixedAssetName }}
+                </td>
+                <td
+                  class="textLong"
+                  style="max-width: 160px; padding-left: 20px"
+                >
                   {{ asset.FixedAssetCategoryName }}
                 </td>
-                <td class="textLong" style="max-width:160px;padding-left: 20px">{{ asset.DepartmentName }}</td>
+                <td
+                  class="textLong"
+                  style="max-width: 160px; padding-left: 20px"
+                >
+                  {{ asset.DepartmentName }}
+                </td>
                 <td class="text-right">{{ asset.Quantity }}</td>
                 <td class="text-right">
                   {{ this.formatSalary(asset.Cost) }}
@@ -165,57 +197,65 @@
               </tr>
             </tbody>
           </table>
+          <!-- </div> -->
         </div>
-        <table style="position: absolute; bottom: 17px; width: 100%">
-          <tfoot>
-            <tr>
-              <td>
-                <div class="pagination">
-                  <p class="pagination-title">
-                    Tổng số: <b>{{ Number(this.totalPage) }}</b> bản ghi
-                  </p>
-                  <div class="padding-btn-wrap">
-                    <MISACombobox
-                      :tag="'dropdownPagination'"
-                      :checkIsEmpty="'checkIsEmpty'"
-                      @getComboSelected="getPageSize"
-                    />
-                    <!-- <span class="padding-sum">20</span>
+        <div
+          class="m-table-container"
+          ref="FooterTable"
+          @scroll="
+            this.$refs.MainTable.scrollLeft = this.$refs.FooterTable.scrollLeft
+          "
+        >
+          <table style="width: 100%">
+            <tfoot>
+              <tr>
+                <td style="min-width: 745px">
+                  <div class="pagination">
+                    <p class="pagination-title">
+                      Tổng số: <b>{{ Number(this.totalPage) }}</b> bản ghi
+                    </p>
+                    <div class="padding-btn-wrap">
+                      <MISACombobox
+                        :tag="'dropdownPagination'"
+                        :checkIsEmpty="'checkIsEmpty'"
+                        @getComboSelected="getPageSize"
+                      />
+                      <!-- <span class="padding-sum">20</span>
                     <button class="icon-down mg-right-12 mg-left-8"></button> -->
+                    </div>
+                    <paginate
+                      :page-count="totalPageSize"
+                      :prev-link-class="'prev-link-class'"
+                      :next-link-class="'next-link-class'"
+                      :click-handler="clickCallback"
+                      :prev-text="'Prev'"
+                      :next-text="'Next'"
+                      :container-class="'pagination-btn'"
+                    >
+                    </paginate>
                   </div>
-                  <paginate
-                    :page-count="totalPageSize"
-                    :prev-link-class="'prev-link-class'"
-                    :next-link-class="'next-link-class'"
-                    :click-handler="clickCallback"
-                    :prev-text="'Prev'"
-                    :next-text="'Next'"
-                    :container-class="'pagination-btn'"
-                  >
-                  </paginate>
-                </div>
-              </td>
-              <td class="text-right text-bold" style="width: 60px">
-                {{ totalQuantity }}
-              </td>
-              <td class="text-right text-bold" style="width: 120px">
-                {{ totalCost }}
-              </td>
+                </td>
+                <td class="text-right text-bold" style="min-width: 60px">
+                  {{ totalQuantity }}
+                </td>
+                <td class="text-right text-bold" style="min-width: 120px">
+                  {{ totalCost }}
+                </td>
 
-              <td class="text-right text-bold" style="width: 120px">
-                {{ totalAccumulate }}
-              </td>
-              <td class="text-right text-bold" style="width: 120px">
-                {{ totalPriceExtra }}
-              </td>
-              <td style="width: 100px"></td>
-            </tr>
-          </tfoot>
-        </table>
+                <td class="text-right text-bold" style="min-width: 120px">
+                  {{ totalAccumulate }}
+                </td>
+                <td class="text-right text-bold" style="min-width: 120px">
+                  {{ totalPriceExtra }}
+                </td>
+                <td style="min-width: 100px"></td>
+              </tr>
+            </tfoot>
+          </table>
+        </div>
       </div>
     </div>
     <!-- :isShow="isShowDialog" -->
-    <!-- <LicenseDetail v-if="isShowDialog"/> -->
     <AssetDetail
       ref="assetDlg"
       v-if="isShowDialog"
@@ -247,8 +287,6 @@
       @btnSave="btnSave"
       @focusError="focusError"
     />
-
-   
   </div>
 </template>
 
@@ -265,7 +303,7 @@ import axios from "axios";
 // import MISACombobox from "../base/MISACombobox.vue";
 import Paginate from "vuejs-paginate-next";
 
-import LicenseDetail from "../../views/LicenseDetail.vue"
+import LicenseDetail from "../../views/LicenseDetail.vue";
 export default {
   name: "TheContent",
   components: {
@@ -277,7 +315,7 @@ export default {
     // MISALoading,
     // MISACombobox,
     Paginate,
-    LicenseDetail
+    LicenseDetail,
   },
 
   beforeCreate() {},
@@ -291,9 +329,7 @@ export default {
 
   beforeMount() {},
 
-  mounted() {
-    
-  },
+  mounted() {},
 
   updated() {},
 
@@ -365,17 +401,16 @@ export default {
 
   methods: {
     /**
-    * Mô tả : Xem name có giá trị hay không để thực hiện search
-    * @param
-    * @return
-    * Created by: QuyenNC
-    * Created date: 23:13 30/05/2022
-    */
+     * Mô tả : Xem name có giá trị hay không để thực hiện search
+     * @param
+     * @return
+     * Created by: QuyenNC
+     * Created date: 23:13 30/05/2022
+     */
     async changeCombobox(name, tag) {
       if (tag === "DepartmentCode") {
         this.getDepartmentName = name;
-      }
-      else {
+      } else {
         this.getFixedAssetCategoryName = name;
       }
       await this.search();
@@ -460,7 +495,7 @@ export default {
      * Created date: 22:31 21/05/2022
      */
     async getTypeAsset(value) {
-      console.log("Line 458",value);
+      console.log("Line 458", value);
       // Lấy ra tên loại tài sản
       this.getFixedAssetCategoryName = value.itemData.FixedAssetCategoryName;
       // gọi hàm tìm kiếm
