@@ -83,7 +83,7 @@ export default {
           console.log(res);
         });
     } else if (this.tag == "dropdownPagination") {
-      this.content = "20";
+      this.content = "2";
       this.fields = {
         text: "pageSize",
         value: "id",
@@ -218,23 +218,23 @@ export default {
       dropdownPagination: [
         {
           id: 1,
-          pageSize: 20,
+          pageSize: 2,
         },
         {
           id: 2,
-          pageSize: 30,
+          pageSize: 3,
         },
         {
           id: 3,
-          pageSize: 40,
+          pageSize: 4,
         },
         {
           id: 4,
-          pageSize: 50,
+          pageSize: 5,
         },
         {
           id: 5,
-          pageSize: 60,
+          pageSize: 6,
         },
       ],
       // categoriesPart: [

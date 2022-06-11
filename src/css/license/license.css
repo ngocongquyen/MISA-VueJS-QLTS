@@ -17,3 +17,9 @@
     padding:0 23px 0 20px;
     margin-bottom: 8px;
 }
+
+.license-icon-wrap {
+    background-color: #fff;
+    display: flex;
+    align-items: center;
+}

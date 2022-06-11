@@ -6,7 +6,7 @@
     </div>
     <div class="navbar-content">
       <ul class="navbar-list">
-        <li class="navbar-item">
+        <!-- <li class="navbar-item">
           <div class="navbar-iem-icon-wrap">
             <div class="m-icon-24 mg-auto">
               <div class="icon-overview"></div>
@@ -18,7 +18,7 @@
               <div class="navbar-icon-down"></div>
             </div>
           </div>
-        </li>
+        </li> -->
         <li class="navbar-item navbar-link-selected">
           <div class="navbar-iem-icon-wrap">
             <div class="m-icon-24 mg-auto">
@@ -27,9 +27,9 @@
           </div>
           <div class="navbar-dropdown">
             <router-link to="/asset" class="navbar-link">Tài sản</router-link>
-            <div class="m-icon-24">
+            <!-- <div class="m-icon-24">
               <div class="navbar-icon-down"></div>
-            </div>
+            </div> -->
           </div>
         </li>
         <li class="navbar-item">
@@ -42,12 +42,12 @@
             <router-link to="/license" class="navbar-link"
               >Ghi tăng</router-link
             >
-            <div class="m-icon-24">
+            <!-- <div class="m-icon-24">
               <div class="navbar-icon-down"></div>
-            </div>
+            </div> -->
           </div>
         </li>
-        <li class="navbar-item">
+        <!-- <li class="navbar-item">
           <div class="navbar-iem-icon-wrap navbar-background">
             <div class="m-icon-24 mg-auto">
               <div class="icon-assetHT"></div>
@@ -112,7 +112,7 @@
               <div class="navbar-icon-down"></div>
             </div>
           </div>
-        </li>
+        </li> -->
       </ul>
     </div>
     <div class="navbar-footer">

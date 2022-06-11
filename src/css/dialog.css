@@ -8,6 +8,7 @@
 }
 
 .m-dialog-header {
+    font-family: MISA Font Bold;
     display: flex;
     padding:0 16px;
     justify-content:space-between;
@@ -15,6 +16,7 @@
 
 .m-dialog-header-title {
     margin:20px 0;
+    font-size: 20px;
 }
 
 .m-dialog-content {

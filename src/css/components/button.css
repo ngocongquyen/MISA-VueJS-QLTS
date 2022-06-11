@@ -15,6 +15,10 @@
     border: 1px solid #1aa4c8;
 }
 
+.m-button:hover {
+    background-color: #1aa4c8;
+    color:#fff;
+}
 .m-button-icon {
     line-height: 36px;
     color: #fff;

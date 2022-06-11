@@ -26,6 +26,7 @@
 .license-detail .outer {
     height:158px;
     overflow-y: auto;
+    background-color: #fff;
 }
 
 .license-detail {

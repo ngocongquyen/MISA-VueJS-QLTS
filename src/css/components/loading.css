@@ -9,8 +9,8 @@
 	overflow: hidden;
 }
 .load img, .textNoData .textBody{
-	width: 150px;
-	height: 150px;
+	/* width: 150px;
+	height: 150px; */
 	position: absolute; 
 	top: 50%;
 	left: 50%;

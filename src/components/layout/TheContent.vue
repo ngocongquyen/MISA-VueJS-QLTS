@@ -140,14 +140,16 @@
               <div class="textBody">Không có dữ liệu</div>
             </div>
             <tbody id="tblasset" v-else>
-              <tr
+              <tr            
                 v-for="(asset, index) in assets"
                 :key="asset.FixedAssetId"
                 @dblclick="showFormAssetDetail(asset)"
                 @click="rowOnClickChecked($event, asset)"
+                :class="asset.checked == true ? 'active-selected' : ''"
               >
+                <!-- :checked="assetList.includes(asset)" -->
                 <td>
-                  <MISACheckbox :checked="assetList.includes(asset)" />
+                  <MISACheckbox :checked="asset.checked" ref="checkAsset" />
                 </td>
                 <td style="text-align: center">{{ index + 1 }}</td>
                 <td style="padding-left: 25px">{{ asset.FixedAssetCode }}</td>
@@ -186,6 +188,7 @@
                   <div class="btn-feature">
                     <MISAButton
                       :class="'filter-right-icon icon-editing mg-right-16 edit'"
+                      style="margin-right: 0"
                       @click="showFormAssetDetail(asset)"
                     ></MISAButton>
                     <MISAButton
@@ -214,10 +217,11 @@
                     <p class="pagination-title">
                       Tổng số: <b>{{ Number(this.totalPage) }}</b> bản ghi
                     </p>
+                    <!-- :control="pageSize" -->
                     <div class="padding-btn-wrap">
                       <MISACombobox
                         :tag="'dropdownPagination'"
-                        :checkIsEmpty="'checkIsEmpty'"
+                        :checkIsEmpty="'checkIsEmpty'"                       
                         @getComboSelected="getPageSize"
                       />
                       <!-- <span class="padding-sum">20</span>
@@ -230,6 +234,7 @@
                       :click-handler="clickCallback"
                       :prev-text="'Prev'"
                       :next-text="'Next'"
+                      v-model="this.pageIndex"
                       :container-class="'pagination-btn'"
                     >
                     </paginate>
@@ -394,6 +399,13 @@ export default {
       }, 0);
       return this.formatSalary(totalPriceExtra);
     },
+    /**
+    * Mô tả : Tính tổng số trang
+    * @param
+    * @return
+    * Created by: QuyenNC
+    * Created date: 14:59 09/06/2022
+    */
     totalPageSize: function () {
       return Math.ceil(this.totalRecordSearch / this.pageSize);
     },
@@ -457,6 +469,8 @@ export default {
     async getPageSize(value) {
       // Thay đổi số sản phẩm trên 1 trang
       this.pageSize = value.itemData.pageSize;
+    // Gán lại số trang về ban đầu khi thay đổi pageSize
+      this.pageIndex = 1;
       // gọi hàm tìm kiếm
       await this.search();
     },
@@ -568,6 +582,14 @@ export default {
           // gán dữ liệu vào mảng assets
           me.assets = response.data.search;
 
+          //Gán dữ liệu để duyệt xem kai nào đk check.
+          me.checkAssetList = response.data.search;
+
+          // Thêm checked vào các element
+          response.data.search.forEach((element) => {
+            element.checked = false;
+          });
+
           me.totalRecordSearch = response.data.totalRecord;
           // tắt loading khi có dữ liệu trả về
           me.isLoadingData(false);
@@ -654,7 +676,14 @@ export default {
      * Created date: 16:14 27/04/2022
      */
     showAlert() {
+      console.log(this.$refs.checkAsset);
       this.formMode = "";
+
+      this.assetList = this.checkAssetList.filter((asset) => {
+        return asset.checked == true;
+      });
+
+      console.log(this.assetList);
       // Hiện hoặc tắt alert
       this.isAlert = !this.isAlert;
       // Nếu assetList có phần khi ta bấm check.
@@ -688,6 +717,7 @@ export default {
      * Created date: 17:25 25/04/2022
      */
     async btnOnClickDelete() {
+      console.log();
       // đưa formMode về rỗng khi xóa.
       var me = this;
       // Tắt alert
@@ -791,9 +821,14 @@ export default {
       this.isChecked = !this.isChecked;
       // Nếu bằng true thì add tất cả vào mảng assetList
       if (this.isChecked) {
-        this.assetList = [...this.assets];
+        this.checkAssetList.filter((asset) => {
+          return asset.checked == false ? (asset.checked = true) : null;
+        });
+        // this.assetList = [...this.assets];
       } else {
-        this.assetList = [];
+        this.checkAssetList.filter((asset) => {
+          return asset.checked == true ? (asset.checked = false) : null;
+        });
       }
     },
     /**
@@ -813,23 +848,11 @@ export default {
         this.replication(asset);
         //
       } else {
-        // kiểm tra xem array có phần tử đó chưa chưa có thì push vào mảng
-        // Nếu true
-        if (this.assetList.includes(asset)) {
-          // Trả về vị trị phần tử đó trong mảng
-          const index = this.assetList.indexOf(asset);
-          // Xóa phần tử đó khỏi mảng
-          this.assetList.splice(index, 1);
-
-          // Nếu độ dài mảng mới k bằng mảng cũ thì tắt checkbox ô đầu tiên
-          if (this.assetList.length !== this.assets.length) {
-            this.isChecked = false;
-          }
-        }
-        // Nếu chưa có thì push vào mảng
-        else {
-          this.assetList.push(asset);
-          console.log("Line 717");
+        if (asset.checked == false) {
+          asset.checked = true;
+        } else {
+          asset.checked = false;
+          this.isChecked = false;
         }
       }
     },
@@ -862,7 +885,7 @@ export default {
       var me = this;
       // Gọi api sinh mã mới
       await axios
-        .get("http://localhost:5062/api/v1/FixedAssets/newAssetCode")
+        .get("http://localhost:5062/api/v1/FixedAssets/NewCode")
         .then(function (response) {
           // Gán dữ liệu vào ô mã tài sản
           me.assetSelected.FixedAssetCode = response.data;
@@ -963,6 +986,7 @@ export default {
 
   data() {
     return {
+      // Ẩn hiện toastMessage
       isShowMessage: false,
       fullName: "Nhan vien",
       isShowDialog: false,
@@ -994,7 +1018,7 @@ export default {
       //loading
       isLoading: false,
 
-      pageIndex: null,
+      pageIndex: 1,
 
       arrayAssetId: [],
 
@@ -1016,6 +1040,8 @@ export default {
       arrayEmpty: [],
 
       totalRecordSearch: 0,
+
+      checkAssetList: [],
     };
   },
 };

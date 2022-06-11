@@ -672,7 +672,9 @@ export default {
      * Created date: 10:19 24/05/2022
      */
     checkShowAlert(error, btnName) {
+      // Mở form alert
       this.$emit("isShowAlert", false);
+      //
       this.$emit("btnCancel", (this.error = error), (this.btnName = btnName));
     },
 

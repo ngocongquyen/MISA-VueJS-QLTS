@@ -99,7 +99,7 @@ body {
 
 ::-webkit-scrollbar {
     width: 4px;
-    height: 10px;
+    height: 4px;
     scroll-padding: 20px;   
 }
 
@@ -207,4 +207,12 @@ input::-webkit-inner-spin-button {
 
 .pb-20 {
     padding-bottom: 20px;
+}
+
+.mg-left-right {
+    margin: 0 10px;
+}
+
+.visibility-none {
+    visibility:hidden;
 }

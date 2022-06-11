@@ -55,6 +55,12 @@
 	margin:auto;
 }
 
+.license-icon-down {
+	background: url('../../assets/icon/qlts-icon.png') no-repeat -158px -249px;;
+	width: 11px;
+	height: 7px;
+}
+
 /* icon header */
 .icon-notification {
     background: url('../../assets/icon/qlts-icon.png') no-repeat -332px -109px;
@@ -199,6 +205,12 @@
 
 .icon-license {
 	background: url('../../assets/icon/qlts-icon.png') no-repeat -286px -153px;
+	width: 24px;
+	height: 20px;
+}
+
+.icon-horizontal {
+	background: url('../../assets/icon/qlts-icon.png') no-repeat -110px -420px;
 	width: 24px;
 	height: 20px;
 }
