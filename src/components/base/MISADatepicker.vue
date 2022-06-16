@@ -4,6 +4,7 @@
       ref="input"
       format="dd/MM/yyyy"
       selectText="Chọn"
+      utc
       cancelText="Hủy"
       :enableTimePicker="false"
       :textInput="true"
@@ -16,6 +17,7 @@
       @update:modelValue="selectDate"
     />
     <div class="datepicker-icon"></div>
+    <span class="fieldIsEmpty" v-if="this.isImport" >{{this.nameValue}} không được phép để trống</span>
   </div>
 </template>
 
@@ -27,7 +29,7 @@ export default {
   components: {
     Datepicker,
   },
-  props: ["modelValue", "control", "tag", "fileName"],
+  props: ["modelValue", "control", "tag", "fileName","nameValue"],
   emits: ["update:modelValue"],
   methods: {
     /**
@@ -38,7 +40,6 @@ export default {
      * Created date: 21:41 30/05/2022
      */
     setFocus() {
-      console.log("quyen");
       this.$refs.input.$el.focus();
     },
     /**
@@ -61,6 +62,7 @@ export default {
 
     validateInput() {
       if (this.date === null) {
+        console.log("abc");
         this.isImport = true;
       } else {
         this.isImport = false;

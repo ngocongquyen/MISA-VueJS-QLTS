@@ -162,3 +162,8 @@ table tbody tr td:first-child {
 .active-selected{
   background-color: rgba(26, 164, 200, 0.2);
 }
+
+.active-selected .btn-feature {
+  display: flex;
+  align-items: center;
+}

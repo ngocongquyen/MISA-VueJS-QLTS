@@ -8,7 +8,7 @@ import store from "../router/store";
 // import store from "./store";
 const routes = [
   {
-    path: "/asset",
+    path: "/main",
     component: TheMain,
     name: "main",
     meta: {

@@ -22,116 +22,124 @@
 @import url(./components/pop-up.css); */
 
 body {
-    font-family: MISA Font;
-    font-size:13px;
-    margin: 0;
-    box-sizing: border-box;
-    padding:0;
+  font-family: MISA Font;
+  font-size: 13px;
+  margin: 0;
+  box-sizing: border-box;
+  padding: 0;
 }
 
 @font-face {
-    font-family: MISA Font;
-    src: url(../assets/font/Roboto/Roboto-Regular.ttf);
+  font-family: MISA Font;
+  src: url(../assets/font/Roboto/Roboto-Regular.ttf);
 }
 
 @font-face {
-    font-family: MISA Font Bold;
-    src: url(../assets/font/Roboto/Roboto-Bold.ttf);
+  font-family: MISA Font Bold;
+  src: url(../assets/font/Roboto/Roboto-Bold.ttf);
 }
 
 @font-face {
-    font-family: MISA Font Italic;
-    src: url(../assets/font/Roboto/Roboto-Italic.ttf);
+  font-family: MISA Font Italic;
+  src: url(../assets/font/Roboto/Roboto-Italic.ttf);
 }
 
 @font-face {
-    font-family: MISA font Medium;
-    src: url(../assets/font/Roboto/Roboto-Medium.ttf);
+  font-family: MISA font Medium;
+  src: url(../assets/font/Roboto/Roboto-Medium.ttf);
 }
 
 .m-row {
-    width: 100%;
+  width: 100%;
+}
+
+.mg-top-8 {
+  margin-top: 8px;
 }
 
 .mg-top-4 {
-    margin-top:4px;
-}
-
-.mg-left-8 {
-    margin-left:8px;
-}
-
-.mg-right-8 {
-    margin-right:8px;
-}
-
-.mg-left-6 {
-    margin-left:6px;
-}
-
-.mg-top-16 {
-    margin-top:16px;
-}
-
-.mg-right-16 {
-    margin-right:16px;
-}
-
-.mg-right-10 {
-    margin-right:10px;
-}
-
-.mg-right-12 {
-    margin-right:12px;
-}
-
-.mg-left-15 {
-    margin-left:15px;
+  margin-top: 4px;
 }
 
 .mg-bottom-8 {
-    margin-bottom: 8px;
+  margin-bottom: 4px;
+}
+
+.mg-left-8 {
+  margin-left: 8px;
+}
+
+.mg-right-8 {
+  margin-right: 8px;
+}
+
+.mg-left-6 {
+  margin-left: 6px;
+}
+
+.mg-top-16 {
+  margin-top: 16px;
+}
+
+.mg-right-16 {
+  margin-right: 16px;
+}
+
+.mg-right-10 {
+  margin-right: 10px;
+}
+
+.mg-right-12 {
+  margin-right: 12px;
+}
+
+.mg-left-15 {
+  margin-left: 15px;
+}
+
+.mg-bottom-8 {
+  margin-bottom: 8px;
 }
 
 .pg-left-20 {
-    padding-left: 20px;
+  padding-left: 20px;
 }
 
 ::-webkit-scrollbar {
-    width: 4px;
-    height: 4px;
-    scroll-padding: 20px;   
+  width: 4px;
+  height: 4px;
+  scroll-padding: 20px;
 }
 
 .outer::-webkit-scrollbar-track {
-    margin-block: 40px 0; 
+  margin-block: 40px 0;
 }
 
 .outer::-webkit-scrollbar {
-    height:0;
+  height: 0;
 }
 
 .license-detail .outer::-webkit-scrollbar {
-    height:4px;
+  height: 4px;
 }
 
 .modal__body::-webkit-scrollbar-track {
-    margin-block: 0 60px; 
+  margin-block: 0 60px;
 }
 
-body::-webkit-scrollbar{
-    height:0;
-    width: 0;
+body::-webkit-scrollbar {
+  height: 0;
+  width: 0;
 }
 
 ::-webkit-scrollbar-track {
-    background: #f1f1f1;
-    border-radius:10px;
-}  
+  background: #f1f1f1;
+  border-radius: 10px;
+}
 
 ::-webkit-scrollbar-thumb {
-    background: #888; 
-    border-radius:10px;
+  background: #888;
+  border-radius: 10px;
 }
 
 input::-webkit-outer-spin-button,
@@ -141,78 +149,79 @@ input::-webkit-inner-spin-button {
 }
 
 .m-border {
-    border: 1px solid #afafaf;
+  border: 1px solid #afafaf;
 }
 
 .text-right {
-    text-align: right !important;
+  text-align: right !important;
 }
 
 .text-center {
-    text-align: center;
+  text-align: center;
 }
 
 .padding-16 {
-    padding-left: 16px;
-    padding-right: 16px
-} 
+  padding-left: 16px;
+  padding-right: 16px;
+}
 
 .text-right {
-    text-align: right;
+  text-align: right;
 }
 
 .m-w-50 {
-    width: 50%;
+  width: 50%;
 }
 
 .m-flex {
-    display: flex;
-    align-items:center;
+  display: flex;
+  align-items: center;
 }
 
-.m-icon-24 {
-    width: 24px;
-    height: 24px;
-    flex-shrink: 0;
-    display: flex;
-    align-items: center;
-    justify-content:center;
-    cursor: pointer;
-}
 
 .mg-right-20 {
-    margin-right:20px;
+  margin-right: 20px;
 }
 
 .mg-auto {
-    margin: auto;
+  margin: auto;
 }
 
 .text-bold {
-    font-weight: bold;
+  font-weight: bold;
 }
 
 .pg-rg-30 {
-    padding-right: 30px;
+  padding-right: 30px;
 }
 
 .danger {
-    border: 1px solid red;
+  border: 1px solid red;
 }
 
 .bg-white {
-    background-color: #fff;
-    padding-left: 16px;
+  background-color: #fff;
+  padding-left: 16px;
 }
 
 .pb-20 {
-    padding-bottom: 20px;
+  padding-bottom: 20px;
 }
 
 .mg-left-right {
-    margin: 0 10px;
+  margin: 0 10px;
 }
 
 .visibility-none {
-    visibility:hidden;
+  visibility: hidden;
+}
+
+a {
+  text-decoration: none;
+}
+
+.fieldIsEmpty {
+  margin-top: 4px;
+  display: block;
+  color: #ff4747;
 }

@@ -21,10 +21,11 @@
                   :title="'Nhập mã tài sản'"
                   :type="'text'"
                   :fileName="'Mã tài sản'"
+                  :isRequired="true"
                   :tag="'FixedAssetCode'"
                   ref="txtAssetCode"
                   :control="asset.FixedAssetCode"
-                  class="m-border"
+                  class=""
                   @changeInput="changeInput"
                   maxLength="20"
                 />
@@ -40,11 +41,12 @@
                   :title="'Nhập mã tài sản'"
                   :fileName="'Tên tài sản'"
                   :type="'text'"
+                  :isRequired="true"
                   :tag="'FixedAssetName'"
                   ref="txtFixedAssetName"
                   :control="asset.FixedAssetName"
                   @changeInput="changeInput"
-                  class="m-border"
+                  class=""
                   maxLength="255"
                 />
               </div>
@@ -118,11 +120,12 @@
                   :fileName="'Số lượng'"
                   :tag="'Quantity'"
                   ref="txtQuantity"
+                  :isRequired="true"
                   :control="asset.Quantity"
                   @changeInput="changeInput"
                   @keypress="isNumber($event)"
                   @keyup="upAnDownQuantity($event)"
-                  class="text-right m-border pg-rg-30"
+                  class="text-right  pg-rg-30"
                   min="0"
                 />
                 <div class="m-combobox-icon">
@@ -148,11 +151,12 @@
                   :title="'Nhập nguyên giá'"
                   :type="'text'"
                   :fileName="'Nguyên giá'"
+                  :isRequired="true"
                   ref="txtCost"
                   :control="changeFormatPrice"
                   v-model="changeFormatPrice"
                   @changeInput="changeInput"
-                  class="m-border text-right"
+                  class=" text-right"
                   @keypress="isNumber($event)"
                   maxLength="25"
                 />
@@ -170,9 +174,10 @@
                   ref="txtLifeTime"
                   :tag="'LifeTime'"
                   :control="asset.LifeTime"
+                  :isRequired="true"
                   @changeInput="changeInput"
                   maxLength="11"
-                  class="m-border text-right"
+                  class=" text-right"
                   @keypress="isNumber($event)"
                 />
               </div>
@@ -190,12 +195,13 @@
                   :fileName="'Tỷ lệ hao mòn'"
                   :type="'number'"
                   :tag="'DepreciationRate'"
+                  :isRequired="true"
                   ref="txtDepreciationRate"
                   :control="changeDepreciationRate"
                   v-model="changeDepreciationRate"
                   @changeInput="changeInput"
                   @keypress="isNumber($event)"
-                  class="text-right m-border pg-rg-30"
+                  class="text-right  pg-rg-30"
                 />
 
                 <button class="m-combobox-icon icon-top-down"></button>
@@ -209,13 +215,14 @@
                 <MISAInput
                   :title="'Nhập giá trị hoa mòn năm'"
                   :type="'text'"
+                  :isRequired="true"
                   :tag="'DepreciationPerYear'"
                   :fileName="'Giá trị hao mòn năm'"
                   ref="txtDepreciationPerYear"
                   v-model="updateWearRate"
                   :control="updateWearRate"
                   @changeInput="changeInput"
-                  class="m-border text-right"
+                  class=" text-right"
                   @keypress="isNumber($event)"
                 />
               </div>
@@ -225,7 +232,7 @@
               <div class="m-dialog-infor-enter">
                 <input
                   type="text"
-                  class="m-input m-border text-right"
+                  class="m-input text-right m-border"
                   v-model="asset.TrackedYear"
                   disabled
                 />
@@ -540,6 +547,7 @@ export default {
 
       this.asset.DepreciationPerYear =
         value.itemData.DepreciationRate * this.asset.Cost;
+      this.$refs.txtLifeTime.isImport = false;
     },
 
     /**

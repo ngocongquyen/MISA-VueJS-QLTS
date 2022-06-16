@@ -19,34 +19,41 @@
             </div>
           </div>
         </li> -->
-        <li class="navbar-item navbar-link-selected">
+        <router-link
+          class="navbar-item"
+          active-class="navbar-link-selected"
+          to="/asset"
+          exact
+        >
           <div class="navbar-iem-icon-wrap">
             <div class="m-icon-24 mg-auto">
               <div class="icon-asset"></div>
             </div>
           </div>
           <div class="navbar-dropdown">
-            <router-link to="/asset" class="navbar-link">Tài sản</router-link>
+            <a class="navbar-link">Tài sản</a>
             <!-- <div class="m-icon-24">
               <div class="navbar-icon-down"></div>
             </div> -->
           </div>
-        </li>
-        <li class="navbar-item">
+        </router-link>
+        <router-link
+          class="navbar-item"
+          active-class="navbar-link-selected"
+          to="/license"
+        >
           <div class="navbar-iem-icon-wrap">
             <div class="m-icon-24 mg-auto">
               <div class="icon-license"></div>
             </div>
           </div>
           <div class="navbar-dropdown">
-            <router-link to="/license" class="navbar-link"
-              >Ghi tăng</router-link
-            >
+            <a class="navbar-link">Ghi tăng</a>
             <!-- <div class="m-icon-24">
               <div class="navbar-icon-down"></div>
             </div> -->
           </div>
-        </li>
+        </router-link>
         <!-- <li class="navbar-item">
           <div class="navbar-iem-icon-wrap navbar-background">
             <div class="m-icon-24 mg-auto">
@@ -133,15 +140,21 @@ export default {
   name: "TheNavbar",
   props: [],
   mounted() {
-    const navbarLink = document.querySelectorAll(".navbar-item");
-    navbarLink.forEach((element) => {
-      element.onclick = function () {
-        document
-          .querySelector(".navbar-item.navbar-link-selected")
-          .classList.remove("navbar-link-selected");
-        this.classList.add("navbar-link-selected");
-      };
-    });
+    // const navbarLink = document.querySelectorAll(".navbar-item");
+
+    // navbarLink.forEach((element) => {
+     
+    //     element.onclick = function () {
+    //       if (!this.classList.contains(".router-link-exact-active")) {
+    //         document
+    //           .querySelector(".navbar-item.navbar-link-selected")
+    //           .classList.remove("navbar-link-selected");
+    //       }
+
+    //       this.classList.add("navbar-link-selected");
+    //     };
+      
+    // });
   },
   components: {},
 

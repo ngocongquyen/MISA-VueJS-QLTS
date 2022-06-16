@@ -16,8 +16,16 @@
       @focus="setFocus"
       @blur="validateInput"
       @change="changeCombobox"
-      @keydown="keyDownChange"
+     
     ></ejs-combobox>
+      <span
+      class="fieldIsEmpty"
+      style="position: absolute; top: 100%; margin-top: 4px !important"
+      v-if="this.tag == 'sourceInformation' && this.isImport"
+      >Không được bỏ trống ô này</span
+    >
+  
+    
   </div>
 </template>
 
@@ -83,9 +91,15 @@ export default {
           console.log(res);
         });
     } else if (this.tag == "dropdownPagination") {
-      this.content = "2";
+      this.content = "20";
       this.fields = {
         text: "pageSize",
+        value: "id",
+      };
+    }
+    else if(this.tag == "sourceInformation") {
+       this.fields = {
+        text: "budget",
         value: "id",
       };
     }
@@ -97,15 +111,15 @@ export default {
   },
   methods: {
     /**
-    * Mô tả : Quan sát sự thay đổi của Combobox để emit lên TheContent
-    * @param
-    * @return
-    * Created by: QuyenNC
-    * Created date: 23:08 30/05/2022
-    */
+     * Mô tả : Quan sát sự thay đổi của Combobox để emit lên TheContent
+     * @param
+     * @return
+     * Created by: QuyenNC
+     * Created date: 23:08 30/05/2022
+     */
     changeCombobox($event) {
       var changeNameCombobox = "";
-      // Nếu tag = FixedAssetCategoryCode và nameCode = nameFixedAssetCategory 
+      // Nếu tag = FixedAssetCategoryCode và nameCode = nameFixedAssetCategory
       // trong TheContent và giá trị không null,
       // Nếu không có nameCode thì thực hiện trong AssetDetail
       if (this.tag === "FixedAssetCategoryCode") {
@@ -114,8 +128,8 @@ export default {
             changeNameCombobox = $event.itemData.FixedAssetCategoryName;
           }
         }
-         // Nếu không có nameFixedAssetCategory
-         else {
+        // Nếu không có nameFixedAssetCategory
+        else {
           if ($event.itemData != null) {
             changeNameCombobox = $event.itemData.FixedAssetCategoryCode;
           }
@@ -126,7 +140,7 @@ export default {
           if ($event.itemData != null) {
             changeNameCombobox = $event.itemData.DepartmentName;
           }
-        } 
+        }
         // Nếu không có nameDepartment
         else {
           if ($event.itemData != null) {
@@ -156,12 +170,12 @@ export default {
     },
 
     /**
-    * Mô tả : Focus vào ô input
-    * @param
-    * @return
-    * Created by: QuyenNC
-    * Created date: 21:41 30/05/2022
-    */
+     * Mô tả : Focus vào ô input
+     * @param
+     * @return
+     * Created by: QuyenNC
+     * Created date: 21:41 30/05/2022
+     */
     setFocus() {
       this.$refs.input.$el.focus();
     },
@@ -195,14 +209,18 @@ export default {
       } else if (this.tag == "dropdownPagination") {
         categories = this.dropdownPagination;
       }
-
-      var search = this.optionSelected;
-      if (this.optionSelected == null) {
-        return categories;
+      else if(this.tag == "sourceInformation") {
+        categories = this.sourceInformation;
       }
-      return categories.filter((cate) => {
-        return cate.code.toLowerCase().includes(search.toLowerCase()) == true;
-      });
+      
+      return categories;
+      // var search = this.optionSelected;
+      // if (this.optionSelected == null) {
+      //   return categories;
+      // }
+      // return categories.filter((cate) => {
+      //   return cate.code.toLowerCase().includes(search.toLowerCase()) == true;
+      // });
     },
   },
   data() {
@@ -218,23 +236,38 @@ export default {
       dropdownPagination: [
         {
           id: 1,
-          pageSize: 2,
+          pageSize: 20,
         },
         {
           id: 2,
-          pageSize: 3,
+          pageSize: 30,
         },
         {
           id: 3,
-          pageSize: 4,
+          pageSize: 40,
         },
         {
           id: 4,
-          pageSize: 5,
+          pageSize: 50,
         },
         {
           id: 5,
-          pageSize: 6,
+          pageSize: 60,
+        },
+      ],
+
+      sourceInformation: [
+        {
+          id: 1,
+          budget: "Ngân sách Tỉnh",
+        },
+        {
+          id: 2,
+          budget: "Ngân sách Huyện",
+        },
+        {
+          id: 3,
+          budget: "Ngân sách Trung ương",
         },
       ],
       // categoriesPart: [

@@ -553,6 +553,8 @@ export default {
       clearTimeout(this.timeOut);
       // Lấy giá trị input
       this.changeValue = this.$refs.searchInput.value;
+
+       this.pageIndex = 1;
       // đặt timeout và gọi hàm tìm kiếm
       this.timeOut = setTimeout(this.search, 1000);
     },
@@ -661,7 +663,7 @@ export default {
         FixedAssetCategoryName: "",
         Quantity: 0,
         Cost: 0,
-        LifeTime: 0,
+        LifeTime: "",
         DepreciationRate: 0,
         DepreciationPerYear: 0,
         TrackedYear: moment(new Date()).format("yy"),
@@ -676,7 +678,7 @@ export default {
      * Created date: 16:14 27/04/2022
      */
     showAlert() {
-      console.log(this.$refs.checkAsset);
+     
       this.formMode = "";
 
       this.assetList = this.checkAssetList.filter((asset) => {

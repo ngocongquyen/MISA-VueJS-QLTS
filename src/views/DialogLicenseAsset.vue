@@ -20,7 +20,7 @@
                 ref="searchInput"
                 placeholder="Tìm kiếm theo Mã, tên tài sản"
                 class="m-input m-font-style m-border"
-                @input="searchAsset"
+                @change="searchAsset"
               />
             </div>
           </div>
@@ -125,7 +125,8 @@
                     <td style="min-width: 745px">
                       <div class="pagination">
                         <p class="pagination-title">
-                          Tổng số: <b>{{ Number(this.totalPage) }}</b> bản ghi
+                          Tổng số:
+                          <b>{{ Number(this.totalRecordSearch) }}</b> bản ghi
                         </p>
                         <div class="padding-btn-wrap">
                           <MISACombobox
@@ -143,6 +144,7 @@
                           :click-handler="clickCallback"
                           :prev-text="'Prev'"
                           :next-text="'Next'"
+                          v-model="this.pageIndex"
                           :container-class="'pagination-btn'"
                         >
                         </paginate>
@@ -178,20 +180,32 @@
 </template>
 
 <script>
-import axios from "axios";
+
 import Paginate from "vuejs-paginate-next";
 export default {
   name: "DialogLicenseAsset",
   components: {
     Paginate,
   },
-  props: [],
+  props: ["arrayLicenseAsset", "isLoading", "totalNumberPage"],
   created() {
-    this.getData();
-
-    this.search();
+    // this.getData();
+  },
+  watch: {
+    //  Khi có sự thay đổi thì thay đổi mảng tài sản
+    arrayLicenseAsset: function (newValue) {
+      this.assets = newValue;
+    },
+    //  Khi có sự thay đổi thì thay đổi mảng tổng số bản ghi
+    totalNumberPage: function (newValue) {
+      this.totalRecordSearch = newValue;
+    },
   },
   mounted() {
+    // mảng tài sản
+    this.assets = this.arrayLicenseAsset;
+    // Tổng sô bản ghi
+    this.totalRecordSearch = this.totalNumberPage;
     this.$refs.searchInput.focus();
   },
 
@@ -202,22 +216,38 @@ export default {
   },
   methods: {
     /**
-    * Mô tả : Gửi mảng đã chọn lên LicenseDetail
-    * @param
-    * @return
-    * Created by: QuyenNC
-    * Created date: 14:00 09/06/2022
-    */
-    btnAgree() {
-      this.$emit("arrayAsset",this.assetList);
+     * Mô tả : Lấy ra giá trị PageSize từ MISACombobox;
+     * @param value: object khi emit từ MISACombobox;
+     * @return
+     * Created by: QuyenNC
+     * Created date: 10:10 22/05/2022
+     */
+    getPageSize(value) {
+      // Thay đổi số sản phẩm trên 1 trang
+      this.pageSize = value.itemData.pageSize;
+      // Gán lại số trang về ban đầu khi thay đổi pageSize
+      this.pageIndex = 1;
+
+      this.$emit("changePageSize",this.pageSize,this.pageIndex);
     },
     /**
-    * Mô tả : Tắt form DialogLicenseAsset
-    * @param
-    * @return
-    * Created by: QuyenNC
-    * Created date: 09:36 09/06/2022
-    */
+     * Mô tả : Gửi mảng đã chọn lên LicenseDetail
+     * @param
+     * @return
+     * Created by: QuyenNC
+     * Created date: 14:00 09/06/2022
+     */
+    btnAgree() {
+      console.log("Line 237", this.assetList);
+      this.$emit("arrayAsset", this.assetList);
+    },
+    /**
+     * Mô tả : Tắt form DialogLicenseAsset
+     * @param
+     * @return
+     * Created by: QuyenNC
+     * Created date: 09:36 09/06/2022
+     */
     btnClose() {
       this.$emit("btnClose");
     },
@@ -230,63 +260,15 @@ export default {
      * Created date: 16:34 21/05/2022
      */
     searchAsset() {
-      // clear timout
-      clearTimeout(this.timeOut);
-      // Lấy giá trị input
       this.changeValue = this.$refs.searchInput.value;
-      // đặt timeout và gọi hàm tìm kiếm
-      this.timeOut = setTimeout(this.search, 1000);
-    },
-
-    /**
-     * Mô tả : Tìm kiếm theo tên tài sản hoặc mã tài sản, tên bộ phận sử dụng, tên loại tài sản.
-     * @param
-     * @return
-     * Created by: QuyenNC
-     * Created date: 23:39 22/05/2022
-     */
-    async search() {
-      var me = this;
-      // bật loading khi chưa có dữ liệu trả về
-      this.isLoading = true;
-      await axios
-        .get("http://localhost:5062/api/v1/FixedAssets/search", {
-          params: {
-            filter: me.changeValue,
-            pageIndex: me.pageIndex,
-            pageSize: me.pageSize,
-          },
-        })
-        .then(function (response) {
-          // gán dữ liệu vào mảng assets
-          me.assets = response.data.search;
-
-          me.totalRecordSearch = response.data.totalRecord;
-          // tắt loading khi có dữ liệu trả về
-          me.isLoading = false;
-        })
-        .catch(function (response) {
-          console.log(response);
-        });
-    },
-
-    /**
-     * Mô tả : Hàm Lấy dữ liệu
-     * @param
-     * @return
-     * Created by: QuyenNC
-     * Created date: 22:06 08/06/2022
-     */
-    getData() {
-      var me = this;
-      axios
-        .get("http://localhost:5062/api/v1/FixedAssets")
-        .then(function (res) {
-          me.totalPage = res.data.length;
-        })
-        .catch(function (err) {
-          console.log(err);
-        });
+      this.pageIndex = 1;
+      this.$emit("searchFilter", this.changeValue, this.pageIndex);
+      // clear timout
+      // clearTimeout(this.timeOut);
+      // // Lấy giá trị input
+      // this.changeValue = this.$refs.searchInput.value;
+      // // đặt timeout và gọi hàm tìm kiếm
+      // this.timeOut = setTimeout(this.$emit("searchFilter",this.changeValue), 1000);
     },
 
     /**
@@ -299,7 +281,8 @@ export default {
     async clickCallback(pageIndex) {
       // Thay đối số trang.
       this.pageIndex = pageIndex;
-      await this.search();
+
+      this.$emit("changePageIndex", pageIndex);
     },
     /**
      * Mô tả : Format tiền về dạng(xx.xxx.xxx);
@@ -316,13 +299,10 @@ export default {
     },
 
     rowOnClickChecked(asset) {
-      if(this.assetList.includes(asset)) {
+      if (this.assetList.includes(asset)) {
         let index = this.assetList.indexOf(asset);
-
         this.assetList.splice(index, 1);
-      }
-      
-      else {
+      } else {
         this.assetList.push(asset);
       }
     },
@@ -334,11 +314,11 @@ export default {
 
       assetList: [],
       // Ẩn hiện loading
-      isLoading: false,
+      // isLoading: false,
       // Tổng bản ghi
       totalPage: 0,
       // Số trang
-      pageIndex: null,
+      pageIndex: 1,
       // Tổng bản ghi
       totalRecordSearch: 0,
       // Số sản phẩm trên 1 trang

@@ -18,7 +18,7 @@
                     ref="userName"
                     :tag="'userName'"
                     class="input-login"
-                    :control="form.userName"
+                    
                     placeholder="Username, email hoặc số điện thoại"
                     @focus="this.showError = false"
                     @changeInput="changeInput"
@@ -30,7 +30,7 @@
                     ref="passWord"
                     id="iptPassword"
                     type="passWord"
-                    :control="form.passWord"
+                    
                     placeholder="Mật khẩu"
                     class="input-login"
                     @focus="this.showError = false"

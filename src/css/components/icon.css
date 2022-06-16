@@ -214,3 +214,45 @@
 	width: 24px;
 	height: 20px;
 }
+
+.icon-extra {
+	background: url('../../assets/icon/qlts-icon.png') no-repeat -375px -419px;
+	width: 18px;
+	height: 18px;
+}
+
+.icon-minus {
+	background: url('../../assets/icon/qlts-icon.png') no-repeat -375px -463px;
+	width: 18px;
+	height: 18px;
+}
+
+.icon-print {
+	background: url('../../assets/icon/qlts-icon.png') no-repeat -331px -67px;
+	width: 18px;
+	height: 18px;
+}
+
+.icon-more {
+	background: url('../../assets/icon/qlts-icon.png') no-repeat -383px -26px;
+	width: 3px;
+	height: 13px;
+}
+
+.icon-zoom {
+	background: url('../../assets/icon/qlts-icon.png') no-repeat -245px -333px;
+	width: 14px;
+	height: 14px;
+}
+
+.m-icon-24{
+	width: 24px;
+	height: 24px;
+	flex-shrink: 0;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	cursor: pointer;
+}
+
+
