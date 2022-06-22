@@ -1,6 +1,6 @@
 <template>
-  <div class="load">
-    <img src="../../assets/img/loader.gif" />
+  <div class="m-loader-container">
+    <div class="m-loader"></div>
   </div>
 </template>
 

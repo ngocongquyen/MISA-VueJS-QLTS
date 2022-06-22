@@ -2,10 +2,13 @@
   <div class="modal" id="dlgDetail">
     <div class="modal__overlay"></div>
     <div class="modal__body" id="widthLicense">
+      <div class="modal__overlay" style="z-index: 10" v-if="isLoading">
+        <MISALoading />
+      </div>
       <div class="m-dialog">
         <div class="m-license-header">
           <div class="m-dialog-header">
-            <h3 class="m-dialog-header-title">{{this.titlePage}}</h3>
+            <h3 class="m-dialog-header-title">{{ this.titlePage }}</h3>
             <div class="m-icon" @click="btnCancel">
               <div class="icon-close"></div>
             </div>
@@ -18,24 +21,24 @@
                   <label class="m-dialog-label m-dialog-label-license"
                     >Mã chứng từ <span class="requied">*</span></label
                   >
-                  <div class="m-dialog-infor-enter">
-                    <MISAInput
+                  <div class="m-dialog-infor-enter" style="position: relative">
+                    <MISALicenseInput
                       ref="licenseCode"
+                      :fileName="'Mã chứng từ'"
                       :tag="'LicenseCode'"
                       :placeholder="'Nhập mã chứng từ'"
                       :title="'Nhập mã chứng từ'"
                       :type="'text'"
+                      :nameValue="'Mã chứng từ'"
                       :control="license.LicenseCode"
-                      :isRequired="true"
-                      maxLength="50"
-                      @blur="checkIsNull"
+                      :modelValue="license.LicenseCode"
+                      @update:modelValue="
+                        (newValue) => (license.LicenseCode = newValue)
+                      "
+                      :isRequired="isRequired"
+                      :maxlength="'20'"
                       @changeInput="changeInput"
                     />
-                    <span
-                      class="fieldIsEmpty"
-                      :class="this.isEmpty[0] == false ? 'visibility-none' : ''"
-                      >Mã chứng từ không được phép để trống</span
-                    >
                   </div>
                 </div>
                 <div class="m-dialog-col col-4 mg-right-16">
@@ -44,33 +47,28 @@
                   >
                   <MISADatepicker
                     ref="UseDate"
+                    :isRequired="isRequired"
+                    :fileName="'Ngày bắt đầu sử dụng'"
                     @getDate="(newValue) => (this.license.UseDate = newValue)"
                     :nameValue="'Ngày sử dụng'"
                   />
-                  <span
-                    class="fieldIsEmpty"
-                    :class="this.isEmpty[2] == false ? 'visibility-none' : ''"
-                    >không trống</span
-                  >
                 </div>
                 <div class="m-dialog-col col-4">
                   <label class="m-dialog-label m-dialog-label-license"
                     >Ngày ghi tăng <span class="requied">*</span></label
                   >
                   <MISADatepicker
+                    ref="WriteUpDate"
+                    :isRequired="isRequired"
+                    :fileName="'Ngày ghi tăng'"
                     @getDate="
                       (newValue) => (this.license.WriteUpDate = newValue)
                     "
                     :nameValue="'Ngày ghi tăng'"
                   />
-                  <span
-                    class="fieldIsEmpty"
-                    :class="this.isEmpty[2] == false ? 'visibility-none' : ''"
-                    >không trống</span
-                  >
                 </div>
               </div>
-              <div class="row mg-top-4">
+              <div class="row mg-top-18">
                 <div class="m-dialog-col col-12">
                   <label class="m-dialog-label m-dialog-label-license"
                     >Ghi chú</label
@@ -115,7 +113,7 @@
               </div>
             </div>
             <div class="grid" style="background-color: #fff">
-              <div class="outer">
+              <div class="outer" style="height: 158px">
                 <table>
                   <thead style="z-index: 1">
                     <tr>
@@ -124,7 +122,7 @@
                         Mã tài sản
                       </th>
                       <th style="min-width: 130px">Tên tài sản</th>
-                      <th style="min-width: 208px; padding-left: 20px">
+                      <th style="min-width: 200px; padding-left: 20px">
                         Bộ phận sử dụng
                       </th>
                       <th class="text-right" style="min-width: 120px">
@@ -141,12 +139,12 @@
                       </th>
                     </tr>
                   </thead>
-                  <MISALoading v-if="isLoading" />
+                  <!-- <MISALoading v-if="isLoading" /> -->
                   <tbody id="tblAsset">
                     <tr
                       v-for="(asset, index) in arrayListAsset"
                       :key="asset.FixedAssetId"
-                      @dblclick="btnUpdateAsset"
+                      @dblclick="btnUpdateAsset(asset)"
                     >
                       <td style="text-align: center">{{ index + 1 }}</td>
                       <td style="padding-left: 10px">
@@ -185,6 +183,7 @@
                           <div class="m-icon-24 mg-right-16 btn-feature-color">
                             <button
                               class="filter-right-icon icon-editing edit tooltip"
+                              @click="btnUpdateAsset(asset)"
                             >
                               <span class="tooltiptext">Sửa tài sản</span>
                             </button>
@@ -213,7 +212,7 @@
                 <table style="width: 100%">
                   <tfoot>
                     <tr>
-                      <td style="min-width: 518px"></td>
+                      <td style="min-width: 506px"></td>
                       <td class="text-right text-bold" style="min-width: 120px">
                         {{ this.formatSalary(totalCost) }}
                       </td>
@@ -222,7 +221,7 @@
                       </td>
                       <td
                         class="text-right text-bold"
-                        style="min-width: 130px; padding-right: 12px"
+                        style="min-width: 124px; padding-right: 12px"
                       >
                         {{ totalPriceExtra }}
                       </td>
@@ -238,6 +237,7 @@
                   <MISACombobox
                     :tag="'dropdownPagination'"
                     :checkIsEmpty="'checkIsEmpty'"
+                    :control="20"
                     @getComboSelected="getPageSize"
                   />
                   <!-- <span class="padding-sum">20</span>
@@ -290,7 +290,12 @@
       @btnClose="btnClose"
       @arrayAsset="arrayAsset"
     />
-    <DialogUpdateAsset v-if="isShowUpdateAsset" @btnClose="btnClose" />
+    <DialogUpdateAsset
+      v-if="isShowUpdateAsset"
+      @btnClose="btnClose"
+      :licenseDetailSelected="licenseDetailSelected"
+      @updateDetailJson="updateDetailJson"
+    />
   </div>
 </template>
 
@@ -316,7 +321,7 @@ export default {
      * Created date: 14:44 09/06/2022
      */
     totalCost: function () {
-      const totalCost = this.assetDetail.reduce(
+      const totalCost = this.arrayListAsset.reduce(
         (initialValue, currentValue) => {
           return initialValue + currentValue.Cost;
         },
@@ -333,7 +338,7 @@ export default {
      * Created date: 14:44 09/06/2022
      */
     totalAccumulate: function () {
-      const totalAccumulate = this.assetDetail.reduce(
+      const totalAccumulate = this.arrayListAsset.reduce(
         (initialValue, currentValue) => {
           return initialValue + currentValue.Accumulated;
         },
@@ -350,7 +355,7 @@ export default {
      * Created date: 15:00 09/06/2022
      */
     totalPriceExtra: function () {
-      const totalPriceExtra = this.assetDetail.reduce(
+      const totalPriceExtra = this.arrayListAsset.reduce(
         (initialValue, currentValue) => {
           return initialValue + (currentValue.Cost - currentValue.Accumulated);
         },
@@ -371,7 +376,7 @@ export default {
     },
   },
   watch: {},
-  props: ["licenseSelected", "formMode", "arrayAssetSelected","titlePage"],
+  props: ["licenseSelected", "formMode", "arrayAssetSelected", "titlePage"],
   mounted() {
     // focus vào ô lỗi đầu tiên
     this.$refs.licenseCode.setFocus();
@@ -381,18 +386,14 @@ export default {
     this.assetObject = Object.assign({}, this.license);
     //Lưu mảng đã chọn từ DialogLicenseAsset không thay đổi khi search
     this.assetDetail = this.arrayAssetSelected;
-
+    // Lưu các giá trị trong v-for để hiện lên giao diên (arrayAssetSelected: được binding khi gọi api sửa)
     this.arrayListAsset = this.arrayAssetSelected;
-
+    // Lưu các giá trị để search
     this.arraySearchAsset = this.arrayAssetSelected;
-
-    this.arrayAssetInitial = this.arrayAssetSelected;
+    // Gọi hàm tính lại dữ liệu trên 1 tràn
     this.calculateDataPage(this.arraySearchAsset);
   },
   methods: {
-    checkIsNull() {
-      this.isEmpty[0] = this.$refs.licenseCode.isImport;
-    },
     /**
      * Mô tả : Hiện thị  hoặc tắt form DialogUpdateAsset
      * @param
@@ -400,8 +401,28 @@ export default {
      * Created by: QuyenNC
      * Created date: 14:14 12/06/2022
      */
-    btnUpdateAsset() {
-      this.isShowUpdateAsset = true;
+    async btnUpdateAsset(asset) {
+      console.log("Line 401", asset);
+      var me = this;
+      if (asset.LicenseDetailId != null) {
+        await axios
+          .get(
+            "http://localhost:5062/api/v1/LicenseDetails/getAseetAndLicenseDetail/" +
+              asset.LicenseDetailId
+          )
+          .then(function (res) {
+            if (res.status === 200) {
+              me.licenseDetailSelected = res.data;
+              me.isShowUpdateAsset = true;
+            }
+          })
+          .catch(function (res) {
+            console.log(res);
+          });
+      } else {
+        this.licenseDetailSelected = asset;
+        this.isShowUpdateAsset = true;
+      }
     },
     /**
      * Mô tả : Lấy ra giá trị PageSize từ MISACombobox;
@@ -415,12 +436,10 @@ export default {
       this.pageSizeFE = value.itemData.pageSize;
       // đưa về số trang đầu tiên
       this.pageIndexFE = 1;
-      // if (this.input != "") {
-      //   this.calculateDataPage(this.arraySearchAsset);
-      // } else {
-      this.calculateDataPage(this.assetDetail);
-      //}
       // Gọi hàm tính dữ liệu trên trang tiếp theo
+      this.calculateDataPage(this.assetDetail);
+     
+      
     },
     /**
      * Mô tả : Tìm kiếm theo mã, tên tài sản
@@ -437,7 +456,10 @@ export default {
       let array = [];
       for (let item of this.assetDetail) {
         if (
-          item.FixedAssetCode.toLowerCase().includes(this.input.toLowerCase())
+          item.FixedAssetCode.toLowerCase().includes(
+            this.input.toLowerCase()
+          ) ||
+          item.FixedAssetName.toLowerCase().includes(this.input.toLowerCase())
         ) {
           array.push(item);
         }
@@ -468,27 +490,14 @@ export default {
       // Ẩn form DialogLicenseAsset
       this.isShowLicenseAsset = false;
       //Lưu mảng đã chọn từ DialogLicenseAsset không thay đổi khi search
-      this.assetDetail = this.assetDetail.concat(arrayList);
+
+      this.assetDetail = arrayList.concat(this.assetDetail);
 
       // Lưu mảng đã chọn từ DialogLicenseAsset và lưu sự thay đổi
       this.arraySearchAsset = this.assetDetail;
       // Gọi hàm tính dữ liệu
       this.calculateDataPage(this.arraySearchAsset);
-      // Nếu mảng nhận tự DialogLicenseAsset < pageSizeFE trên 1 trang
-      // if (arrayList.length < this.pageSizeFE) {
-      //   // Lặp qua các phần tử để hiện lên giao diện
-      //   for (let i = 0; i < arrayList.length; i++) {
-      //     // Hiện các phần tử lên giao diện lên giao diện
-      //     this.arrayListAsset.push(arrayList[i]);
-      //   }
-      // }
-      // // Nếu mảng nhận tự DialogLicenseAsset > pageSizeFE trên 1 trang
-      // else {
-      //   for (let i = 0; i < this.pageSizeFE; i++) {
-      //     // Hiện các phần tử lên giao diện lên giao diện
-      //     this.arrayListAsset.push(arrayList[i]);
-      //   }
-      // }
+      
     },
 
     /**
@@ -509,21 +518,6 @@ export default {
       this.pageIndexFE = 1;
       // Gọi hàm tính lại dữ liệu
       this.calculateDataPage(this.arraySearchAsset);
-      if (this.formMode == 2) {
-        // var me = this;
-        axios
-          .delete(
-            "http://localhost:5062/api/v1/LicenseDetails/" +
-              asset.LicenseDetailId
-          )
-          .then(function (response) {
-            console.log(response);
-            //  me.$emit("toastMessage", "Xóa dữ liệu thành công");
-          })
-          .catch(function (response) {
-            console.log(response);
-          });
-      }
     },
     /**
      * Mô tả : Tính dữ liệu bản ghi trên các trang tiếp theo
@@ -590,12 +584,12 @@ export default {
       this.license[tag] = content;
     },
     /**
-    * Mô tả : đưa về trang ban đầu và search
-    * @param
-    * @return
-    * Created by: QuyenNC
-    * Created date: 14:59 16/06/2022
-    */
+     * Mô tả : đưa về trang ban đầu và search
+     * @param
+     * @return
+     * Created by: QuyenNC
+     * Created date: 14:59 16/06/2022
+     */
     async searchFilter(filter, pageIndex) {
       // tìm kiếm
       this.filter = filter;
@@ -605,35 +599,35 @@ export default {
       await this.search();
     },
     /**
-    * Mô tả : Thay đổi giá tị pageSize và đưa về trang đầu tiên
-    * @param
-    * @return
-    * Created by: QuyenNC
-    * Created date: 15:03 16/06/2022
-    */
+     * Mô tả : Thay đổi giá tị pageSize và đưa về trang đầu tiên
+     * @param
+     * @return
+     * Created by: QuyenNC
+     * Created date: 15:03 16/06/2022
+     */
     async changePageSize(pageSize, pageIndex) {
       this.pageSize = pageSize;
       this.pageIndex = pageIndex;
       await this.search();
     },
     /**
-    * Mô tả : Thay đối số trang
-    * @param
-    * @return
-    * Created by: QuyenNC
-    * Created date: 15:04 16/06/2022
-    */
+     * Mô tả : Thay đối số trang
+     * @param
+     * @return
+     * Created by: QuyenNC
+     * Created date: 15:04 16/06/2022
+     */
     async changePageIndex(pageIndex) {
       this.pageIndex = pageIndex;
       await this.search();
     },
     /**
-    * Mô tả : Phân trang dữ liệu khi có hoặc không có mảng các ID
-    * @param
-    * @return
-    * Created by: QuyenNC
-    * Created date: 15:06 16/06/2022
-    */
+     * Mô tả : Phân trang dữ liệu khi có hoặc không có mảng các ID
+     * @param
+     * @return
+     * Created by: QuyenNC
+     * Created date: 15:06 16/06/2022
+     */
     async search() {
       var me = this;
       const transformRequestOptions = (params) => {
@@ -665,8 +659,16 @@ export default {
           paramsSerializer: (params) => transformRequestOptions(params),
         })
         .then(function (response) {
+          // Lưu các dữ liệu
           me.arrayLicenseAsset = response.data.search;
+
+          // Thêm checked vào các element
+          response.data.search.forEach((element) => {
+            element.checked = false;
+          });
+          // Tổng số trang
           me.totalNumberPage = response.data.totalRecord;
+          // Tắt loading
           me.isLoading = false;
         })
         .catch(function (response) {
@@ -676,21 +678,21 @@ export default {
     },
 
     /**
-    * Mô tả : Chọn các tài sản
-    * @param
-    * @return
-    * Created by: QuyenNC
-    * Created date: 15:07 16/06/2022
-    */
+     * Mô tả : Chọn các tài sản
+     * @param
+     * @return
+     * Created by: QuyenNC
+     * Created date: 15:07 16/06/2022
+     */
     async btnChooseAsset() {
       console.log("Line 626", this.assetDetail);
       // Hiện thị DialogLicenseAsset
       this.isShowLicenseAsset = true;
-      // if (this.assetDetail.length > 0) {
+      // Mảng các id
       this.arrayFixedAssetID = this.assetDetail.map((item) => {
         return item.FixedAssetId;
       });
-
+      // gọi hàm search
       await this.search();
     },
 
@@ -703,9 +705,10 @@ export default {
      */
     checkValidateBackend(statusCode, data, btnName) {
       switch (statusCode) {
-        case 400:
+        case 200:
+          
           // Lấy dữ liệu
-          var errorUserMsg = data.data.data[0];
+          var errorUserMsg = data;
           this.checkShowAlert(errorUserMsg, btnName);
           break;
 
@@ -749,80 +752,141 @@ export default {
      * Created by: QuyenNC
      * Created date: 15:59 08/06/2022
      */
-    btnSaveOnClick() {
-      /* eslint-disable */
+    updateDetailJson(object) {
+      this.fieldDetailJson = object;
+    },
+    /**
+     * Mô tả : thêm dữ liệu vào database
+     * @param
+     * @return
+     * Created by: QuyenNC
+     * Created date: 16:10 21/06/2022
+     */
+    async insertLicenseAndLicenseDetail(btnName) {
+      var objectInsert = [];
       var me = this;
-      var btnName = "btnClose";
-      var errorBody = "";
-      this.license.total = this.totalCost;
-      this.license.CreatedDate = new Date();
-      this.license.ModifiedDate = new Date();
-
-      console.log(this.license.total);
-      if (this.formMode == 1) {
-        if (this.assetDetail.length == 0) {
-          errorBody = "Chọn ít nhất 1 tài sản";
-          this.checkShowAlert(errorBody, btnName);
+      // Duyệt qua các phần tử để insert vào bảng licenseDetail
+      for (var i = 0; i < this.assetDetail.length; i++) {
+        if (
+          this.assetDetail[i].FixedAssetId === this.fieldDetailJson.FixedAssetId
+        ) {
+          objectInsert.push({
+            FixedAssetId: this.assetDetail[i].FixedAssetId,
+            DetailJson: this.fieldDetailJson.DetailJson,
+          });
         } else {
-          var licenseInsert = {
-            license: this.license,
-            licenseAssetDetail: me.assetDetail.map((item) => {
-              return {
-                FixedAssetId: item.FixedAssetId,
-              };
-            }),
-          };
-
-          axios
-            .post(
-              "http://localhost:5062/api/v1/LicenseDetails/multiData",
-              licenseInsert
-            )
-            .then(function (response) {
-              console.log(response);
-              me.$emit("toastMessage", "Lưu dữ liệu thành công");
-              me.$emit("getData");
-              me.$emit("search");
-            })
-            .catch(function (response) {
-              console.log("Line 325", response.response.data);
-              var statusCode = response.request.status;
-              var data = response.response.data;
-              me.checkValidateBackend(statusCode, data, btnName);
-            });
+          objectInsert.push({
+            FixedAssetId: this.assetDetail[i].FixedAssetId,
+          });
         }
       }
-      if (this.formMode == 2) {
-        var arrayFilter = this.assetDetail.filter((element) => {
-          return !this.arrayAssetInitial.includes(element);
-        });
-        var licenseInsert = {
-          license: this.license,
-          licenseAssetDetail: arrayFilter.map((item) => {
-            return {
-              FixedAssetId: item.FixedAssetId,
-            };
-          }),
-        };
 
-        axios
-          .put(
-            "http://localhost:5062/api/v1/LicenseDetails/multiData/" +
-              me.license.LicenseId,
-            licenseInsert
-          )
-          .then(function (res) {
-            console.log(res);
+      var licenseInsert = {
+        license: this.license,
+        licenseAssetDetail: objectInsert,
+      };
+      this.isLoading = true;
+      await axios
+        .post("http://localhost:5062/api/v1/Licenses/multiData", licenseInsert)
+        .then(function (response) {
+         // Nếu có lỗi từ backend vẫn trả về 200
+          if (response.data.userMsg) {
+            console.log("abc");
+            var statusCode = response.status;
+           
+            var data = response.data.data.data[0];
+            // Gọi hàm lỗi backend
+            me.checkValidateBackend(statusCode, data, btnName);
+            me.isLoading = false;
+          } else {
+            // tắt loading
+            me.isLoading = false;
+            me.$emit("toastMessage", "Lưu dữ liệu thành công");
+            // Loading lại data
+            me.$emit("getData");
+            me.$emit("search");
+          }
+        })
+        .catch(function (response) {
+          console.log("Line 325", response);
+
+          me.isLoading = false;
+        });
+    },
+ 
+    /**
+     * Mô tả : Cập nhật license và licenseDetail
+     * @param
+     * @return
+     * Created by: QuyenNC
+     * Created date: 16:14 21/06/2022
+     */
+    async updateLicenseAndLicenseDetail(btnName) {
+      var me = this;
+      // Dữ liệu thêm vào data
+      var licenseInsert = {
+        license: this.license,
+        licenseAssetDetail: me.assetDetail.map((item) => {
+          return {
+            FixedAssetId: item.FixedAssetId,
+          };
+        }),
+      };
+      this.isLoading = true;
+      await axios
+        .put(
+          "http://localhost:5062/api/v1/Licenses/multiData/" +
+            me.license.LicenseId,
+          licenseInsert
+        )
+        .then(function (response) {
+          // Nếu có lỗi backend
+          if (response.data.userMsg) {
+           
+            var statusCode = response.status;
+            
+            var data = response.data.data.data[0];
+           
+            me.checkValidateBackend(statusCode, data, btnName);
+            me.isLoading = false;
+          } else {
+            me.isLoading = false;
             me.$emit("toastMessage", "Sửa dữ liệu thành công");
             me.$emit("search");
-            me.$emit("getAssetFilterFromLicense",me.license);
-          })
-          .catch(function (response) {
-            console.log("Line 325", response.response.data);
-            var statusCode = response.request.status;
-            var data = response.response.data;
-            me.checkValidateBackend(statusCode, data, btnName);
-          });
+            me.$emit("getAssetFilterFromLicense", me.license.LicenseId);
+          }
+        })
+        .catch(function (response) {
+          console.log("Line 325", response);
+         
+        });
+    },
+
+    /**
+     * Mô tả : Kiểm tra xem có rỗng không không thì gọi hàm
+     * @param
+     * @return
+     * Created by: QuyenNC
+     * Created date: 16:25 21/06/2022
+     */
+    async btnSaveOnClick() {
+     
+      var btnName = "btnClose";
+      var errorBody = "";
+      this.license.total = this.totalCost;   
+      // Nếu mảng ban đầu không có dữ liệu
+     if (this.assetDetail.length == 0) {
+        errorBody = "Chọn ít nhất 1 tài sản";
+        this.checkShowAlert(errorBody, btnName);
+      } else {
+        // Nếu formode = 1 gọi hàm thêm dữ liệu
+        if (this.formMode == 1) {
+          await this.insertLicenseAndLicenseDetail(btnName);
+        }
+        // Nếu formode = 2 gọi hàm sửa
+        if (this.formMode == 2) {
+          await this.updateLicenseAndLicenseDetail(btnName);
+        }
       }
     },
 
@@ -863,7 +927,13 @@ export default {
   // },
   data() {
     return {
-      arrayAssetInitial: [],
+      isFieldEmpty: [],
+
+      isRequired: true,
+      arrayContainsEmptyName: [],
+
+      licenseDetailSelected: {},
+
       isEmpty: [false, false, false],
 
       arrayFixedAssetID: [],
@@ -891,7 +961,7 @@ export default {
 
       pageIndexFE: 1,
 
-      pageSizeFE: 2,
+      pageSizeFE: 20,
 
       totalNumberPage: 0,
 
@@ -901,6 +971,7 @@ export default {
 
       input: "",
 
+      fieldDetailJson: "",
       // Lưu thông tin mảng asset từ DialogLicenseAsset
       // assetDetail: [
       //   {

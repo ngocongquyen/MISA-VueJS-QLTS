@@ -24,12 +24,18 @@
 }
 
 .license-detail .outer {
+    height:200px;
+    overflow-y: auto;
+    background-color: #fff;
+}
+
+.license-detail-asset .outer {
     height:158px;
     overflow-y: auto;
     background-color: #fff;
 }
 
-.license-detail {
+.license-detail, .license-detail-asset {
     padding: 0 16px;
 }
 

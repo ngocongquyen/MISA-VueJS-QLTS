@@ -72,11 +72,10 @@
                   <tr
                     v-for="(asset, index) in assets"
                     :key="asset.FixedAssetId"
-                    @dblclick="showFormAssetDetail(asset)"
                     @click="rowOnClickChecked(asset)"
                   >
                     <td>
-                      <MISACheckbox :checked="assetList.includes(asset)" />
+                      <MISACheckbox :checked="asset.checked" ref="checkAsset" />
                     </td>
                     <td style="text-align: center">{{ index + 1 }}</td>
                     <td style="padding-left: 25px">
@@ -132,6 +131,7 @@
                           <MISACombobox
                             :tag="'dropdownPagination'"
                             :checkIsEmpty="'checkIsEmpty'"
+                            :control="20"
                             @getComboSelected="getPageSize"
                           />
                           <!-- <span class="padding-sum">20</span>
@@ -180,7 +180,6 @@
 </template>
 
 <script>
-
 import Paginate from "vuejs-paginate-next";
 export default {
   name: "DialogLicenseAsset",
@@ -204,12 +203,15 @@ export default {
   mounted() {
     // mảng tài sản
     this.assets = this.arrayLicenseAsset;
+    console.log(this.assets);
     // Tổng sô bản ghi
     this.totalRecordSearch = this.totalNumberPage;
+    // focus vào ô input đầu tiên
     this.$refs.searchInput.focus();
   },
 
   computed: {
+    // tổng số trang
     totalPageSize: function () {
       return Math.ceil(this.totalRecordSearch / this.pageSize);
     },
@@ -228,7 +230,7 @@ export default {
       // Gán lại số trang về ban đầu khi thay đổi pageSize
       this.pageIndex = 1;
 
-      this.$emit("changePageSize",this.pageSize,this.pageIndex);
+      this.$emit("changePageSize", this.pageSize, this.pageIndex);
     },
     /**
      * Mô tả : Gửi mảng đã chọn lên LicenseDetail
@@ -238,8 +240,33 @@ export default {
      * Created date: 14:00 09/06/2022
      */
     btnAgree() {
-      console.log("Line 237", this.assetList);
+      this.assetList=this.arrayLicenseAsset.filter((element) => {
+        return element.checked == true;
+      })
       this.$emit("arrayAsset", this.assetList);
+    },
+
+     /**
+     * Mô tả : Kiểm tra xem có checked tất cả hay không
+     * @param
+     * @return
+     * Created by: QuyenNC
+     * Created date: 16:00 26/04/2022
+     */
+    isShowAllChecked() {
+      // kiểm tra xem ô checkbox đầu tiên có check hay không
+      this.isChecked = !this.isChecked;
+      // Nếu bằng true thì add tất cả vào mảng assetList
+      if (this.isChecked) {
+        this.arrayLicenseAsset.filter((asset) => {
+          return asset.checked == false ? (asset.checked = true) : null;
+        });
+        // this.assetList = [...this.assets];
+      } else {
+        this.arrayLicenseAsset.filter((asset) => {
+          return asset.checked == true ? (asset.checked = false) : null;
+        });
+      }
     },
     /**
      * Mô tả : Tắt form DialogLicenseAsset
@@ -298,12 +325,19 @@ export default {
       return format;
     },
 
+    /**
+    * Mô tả : Xem có check hay không
+    * @param
+    * @return
+    * Created by: QuyenNC
+    * Created date: 23:41 19/06/2022
+    */
     rowOnClickChecked(asset) {
-      if (this.assetList.includes(asset)) {
-        let index = this.assetList.indexOf(asset);
-        this.assetList.splice(index, 1);
+      if (asset.checked == false) {
+        asset.checked = true;
       } else {
-        this.assetList.push(asset);
+        asset.checked = false;
+        this.isChecked = false;
       }
     },
   },

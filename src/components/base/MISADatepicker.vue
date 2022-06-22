@@ -4,7 +4,6 @@
       ref="input"
       format="dd/MM/yyyy"
       selectText="Chọn"
-      utc
       cancelText="Hủy"
       :enableTimePicker="false"
       :textInput="true"
@@ -29,7 +28,7 @@ export default {
   components: {
     Datepicker,
   },
-  props: ["modelValue", "control", "tag", "fileName","nameValue"],
+  props: ["modelValue", "control", "tag", "fileName","nameValue","isRequired"],
   emits: ["update:modelValue"],
   methods: {
     /**
@@ -62,7 +61,6 @@ export default {
 
     validateInput() {
       if (this.date === null) {
-        console.log("abc");
         this.isImport = true;
       } else {
         this.isImport = false;

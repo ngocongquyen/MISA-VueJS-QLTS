@@ -120,11 +120,11 @@
                   Bộ phận sử dụng
                 </th>
                 <th class="text-right" style="min-width: 60px">Số lượng</th>
-                <th class="text-right" style="min-width: 120px">Nguyên giá</th>
-                <th class="text-right" style="min-width: 120px">
+                <th class="text-right" style="min-width: 122px">Nguyên giá</th>
+                <th class="text-right" style="min-width: 106px">
                   HM/KH lũy kế
                 </th>
-                <th class="text-right" style="min-width: 120px">
+                <th class="text-right" style="min-width: 108px">
                   Giá trị còn lại
                 </th>
                 <th
@@ -140,7 +140,7 @@
               <div class="textBody">Không có dữ liệu</div>
             </div>
             <tbody id="tblasset" v-else>
-              <tr            
+              <tr
                 v-for="(asset, index) in assets"
                 :key="asset.FixedAssetId"
                 @dblclick="showFormAssetDetail(asset)"
@@ -212,7 +212,7 @@
           <table style="width: 100%">
             <tfoot>
               <tr>
-                <td style="min-width: 745px">
+                <td style="min-width: 500px">
                   <div class="pagination">
                     <p class="pagination-title">
                       Tổng số: <b>{{ Number(this.totalPage) }}</b> bản ghi
@@ -221,7 +221,8 @@
                     <div class="padding-btn-wrap">
                       <MISACombobox
                         :tag="'dropdownPagination'"
-                        :checkIsEmpty="'checkIsEmpty'"                       
+                        :checkIsEmpty="'checkIsEmpty'"
+                        :control="20"
                         @getComboSelected="getPageSize"
                       />
                       <!-- <span class="padding-sum">20</span>
@@ -240,17 +241,17 @@
                     </paginate>
                   </div>
                 </td>
-                <td class="text-right text-bold" style="min-width: 60px">
+                <td class="text-right text-bold" style="min-width: 329px">
                   {{ totalQuantity }}
                 </td>
-                <td class="text-right text-bold" style="min-width: 120px">
+                <td class="text-right text-bold" style="min-width: 126px">
                   {{ totalCost }}
                 </td>
 
-                <td class="text-right text-bold" style="min-width: 120px">
+                <td class="text-right text-bold" style="min-width: 100px">
                   {{ totalAccumulate }}
                 </td>
-                <td class="text-right text-bold" style="min-width: 120px">
+                <td class="text-right text-bold" style="min-width: 109px">
                   {{ totalPriceExtra }}
                 </td>
                 <td style="min-width: 100px"></td>
@@ -290,8 +291,8 @@
       @isShowAlert="isShowAlert"
       @resetForm="resetForm"
       @btnSave="btnSave"
-      @focusError="focusError"
-    />
+      @focusError="focusError">
+    </MISAAlert>
   </div>
 </template>
 
@@ -400,12 +401,12 @@ export default {
       return this.formatSalary(totalPriceExtra);
     },
     /**
-    * Mô tả : Tính tổng số trang
-    * @param
-    * @return
-    * Created by: QuyenNC
-    * Created date: 14:59 09/06/2022
-    */
+     * Mô tả : Tính tổng số trang
+     * @param
+     * @return
+     * Created by: QuyenNC
+     * Created date: 14:59 09/06/2022
+     */
     totalPageSize: function () {
       return Math.ceil(this.totalRecordSearch / this.pageSize);
     },
@@ -469,7 +470,7 @@ export default {
     async getPageSize(value) {
       // Thay đổi số sản phẩm trên 1 trang
       this.pageSize = value.itemData.pageSize;
-    // Gán lại số trang về ban đầu khi thay đổi pageSize
+      // Gán lại số trang về ban đầu khi thay đổi pageSize
       this.pageIndex = 1;
       // gọi hàm tìm kiếm
       await this.search();
@@ -554,7 +555,7 @@ export default {
       // Lấy giá trị input
       this.changeValue = this.$refs.searchInput.value;
 
-       this.pageIndex = 1;
+      this.pageIndex = 1;
       // đặt timeout và gọi hàm tìm kiếm
       this.timeOut = setTimeout(this.search, 1000);
     },
@@ -678,7 +679,6 @@ export default {
      * Created date: 16:14 27/04/2022
      */
     showAlert() {
-     
       this.formMode = "";
 
       this.assetList = this.checkAssetList.filter((asset) => {
@@ -728,35 +728,58 @@ export default {
       for (var i = 0; i < this.assetList.length; i++) {
         this.arrayAssetId.push(this.assetList[i].FixedAssetId);
       }
+      console.log("abc", this.arrayAssetId);
       // Nếu mảng có 1 phần tử gọi api xóa 1
-      if (this.arrayAssetId.length == 1) {
-        await axios
-          .delete(
-            `http://localhost:5062/api/v1/FixedAssets/` + this.arrayAssetId[0]
-          )
-          .then(function () {
-            // Loading lại dữ liệu
-            me.search();
+      // if (this.arrayAssetId.length == 1) {
+      //   await axios
+      //     // .delete(
+      //     //   `http://localhost:5062/api/v1/FixedAssets/` + this.arrayAssetId[0]
+      //     // )
+      //     .delete(
+      //       `http://localhost:5062/api/v1/FixedAssets/checkAssetHaveLicense/` +
+      //         this.arrayAssetId[0]
+      //     )
+      //     .then(function (res) {
+      //       console.log(res.data);
+      //       if (res.data != 1) {
+      //         me.isAlert = false;
+      //         me.toastAlert(
+      //           `Tài sản có mã ${res.data.FixedAssetCode} đã phát sinh chứng từ ghi tăng có mã ${res.data.LicenseCode}`,
+      //           "btnClose"
+      //         );
+      //       }
 
-            me.getData();
-            // Gọi đến hàm xử lý toastMessage
-            me.toastMessage("Xóa dữ liệu thành công");
-          })
-          .catch(function (response) {
-            console.log(response);
-            me.toastMessage("Xóa dữ liệu thất bại");
-          });
-      }
-      // Nếu mảng lớn hơn 1 thì gọi api xóa nhiều và truyền mảng id.
-      else {
+      //       // Loading lại dữ liệu
+      //       me.search();
+
+      //       me.getData();
+
+      //       // Gọi đến hàm xử lý toastMessage
+      //       me.toastMessage("Xóa dữ liệu thành công");
+      //     })
+      //     .catch(function (response) {
+      //       console.log(response.response.data);
+      //       me.toastMessage("Xóa dữ liệu thất bại");
+      //     });
+      // }
+      // // Nếu mảng lớn hơn 1 thì gọi api xóa nhiều và truyền mảng id.
+      // else {
         await axios
-          .delete("http://localhost:5062/api/v1/FixedAssets/deleteMultiple", {
+          .delete("http://localhost:5062/api/v1/FixedAssets/checkAssetHaveLicense", {
             data: JSON.stringify(this.arrayAssetId),
             headers: {
               "content-type": "application/json",
             },
           })
-          .then(function () {
+          .then(function (res) {
+            console.log("abc",res.data);
+             if (res.data.FixedAssetCode) {
+              me.isAlert = false;
+              me.toastAlert(
+                `Tài sản có mã ${res.data.FixedAssetCode} đã phát sinh chứng từ ghi tăng có mã ${res.data.LicenseCode}`,
+                "btnClose"
+              );
+            }
             // Xóa dữ liệu trên UI
             // me.assets = me.assets.filter(function (asset) {
             //   return !me.assetList.includes(asset);
@@ -769,8 +792,9 @@ export default {
             console.log(response);
             me.toastMessage("Xóa dữ liệu thất bại");
           });
-      }
+      //}
       this.assetList = [];
+      this.arrayAssetId = [];
     },
 
     /**

@@ -3,7 +3,7 @@
     <ejs-combobox
       ref="input"
       v-model="content"
-      :text="content"
+      :text="control"
       id="combobox"
       :dataSource="filterCategories"
       :fields="fields"
@@ -16,16 +16,25 @@
       @focus="setFocus"
       @blur="validateInput"
       @change="changeCombobox"
-     
     ></ejs-combobox>
-      <span
+    <span
       class="fieldIsEmpty"
       style="position: absolute; top: 100%; margin-top: 4px !important"
-      v-if="this.tag == 'sourceInformation' && this.isImport"
+      v-if="
+        this.tag == 'sourceInformation' &&
+        this.isImport &&
+        this.checkDupliCate == false
+      "
       >Không được bỏ trống ô này</span
     >
-  
-    
+    <!-- &&
+        this.indexValue == this.index -->
+    <span
+      class="fieldIsEmpty"
+      style="position: absolute; top: 100%; margin-top: 4px !important"
+      v-else-if="this.tag == 'sourceInformation' && this.checkDupliCate == true"
+      >Nguồn chi phí đã tồn tại</span
+    >
   </div>
 </template>
 
@@ -41,6 +50,7 @@ export default {
     "fileName",
     "nameCode",
     "checkIsEmpty",
+    "index",
   ],
 
   components: {
@@ -96,9 +106,8 @@ export default {
         text: "pageSize",
         value: "id",
       };
-    }
-    else if(this.tag == "sourceInformation") {
-       this.fields = {
+    } else if (this.tag == "sourceInformation") {
+      this.fields = {
         text: "budget",
         value: "id",
       };
@@ -109,47 +118,68 @@ export default {
       this.content = newValue;
     },
   },
+
+  mounted() {
+    if (this.tag == "sourceInformation") {
+      this.changeNameCombobox = this.control;
+    }
+  },
   methods: {
     /**
-     * Mô tả : Quan sát sự thay đổi của Combobox để emit lên TheContent
+     * Mô tả : Quan sát sự thay đổi của Combobox để emit lên các ô MISACombobox
      * @param
      * @return
      * Created by: QuyenNC
      * Created date: 23:08 30/05/2022
      */
     changeCombobox($event) {
-      var changeNameCombobox = "";
+      // var changeNameCombobox = "";
       // Nếu tag = FixedAssetCategoryCode và nameCode = nameFixedAssetCategory
       // trong TheContent và giá trị không null,
       // Nếu không có nameCode thì thực hiện trong AssetDetail
       if (this.tag === "FixedAssetCategoryCode") {
         if (this.nameCode === "nameFixedAssetCategory") {
           if ($event.itemData != null) {
-            changeNameCombobox = $event.itemData.FixedAssetCategoryName;
+            this.changeNameCombobox = $event.itemData.FixedAssetCategoryName;
+          } else {
+            this.changeNameCombobox = "";
           }
         }
         // Nếu không có nameFixedAssetCategory
         else {
           if ($event.itemData != null) {
-            changeNameCombobox = $event.itemData.FixedAssetCategoryCode;
+            this.changeNameCombobox = $event.itemData.FixedAssetCategoryCode;
+          } else {
+            this.changeNameCombobox = "";
           }
         }
       }
       if (this.tag === "DepartmentCode") {
         if (this.nameCode === "nameDepartment") {
           if ($event.itemData != null) {
-            changeNameCombobox = $event.itemData.DepartmentName;
+            this.changeNameCombobox = $event.itemData.DepartmentName;
+          } else {
+            this.changeNameCombobox = "";
           }
         }
         // Nếu không có nameDepartment
         else {
           if ($event.itemData != null) {
-            changeNameCombobox = $event.itemData.DepartmentCode;
+            this.changeNameCombobox = $event.itemData.DepartmentCode;
+          } else {
+            this.changeNameCombobox = "";
           }
         }
       }
+      if (this.tag === "sourceInformation") {
+        if ($event.itemData != null) {
+          this.changeNameCombobox = $event.itemData.budget;
+        } else {
+          this.changeNameCombobox = "";
+        }
+      }
 
-      this.$emit("changeCombobox", changeNameCombobox, this.tag);
+      this.$emit("changeCombobox", this.changeNameCombobox, this.tag);
     },
     /**
      * Mô tả : Kiểm tra xem trong MISACombobox có checkIsEmpty không.
@@ -161,11 +191,16 @@ export default {
      */
     validateInput() {
       if (this.checkIsEmpty != "checkIsEmpty") {
-        if (this.content === "") {
+        if (this.changeNameCombobox == "") {
           this.isImport = true;
         } else {
           this.isImport = false;
         }
+        // if (this.content === "" && this.optionSelected == null) {
+        //   this.isImport = true;
+        // } else {
+        //   this.isImport = false;
+        // }
       }
     },
 
@@ -188,8 +223,8 @@ export default {
      * Created date: 23:19 28/05/2022
      */
     setValueSelected(option) {
-      this.optionSelected = option.code;
-      this.$emit("getComboSelected", option);
+      this.optionSelected = option;
+      this.$emit("getComboSelected", option, this.index);
     },
   },
   computed: {
@@ -208,11 +243,10 @@ export default {
         categories = this.arrayCombobox;
       } else if (this.tag == "dropdownPagination") {
         categories = this.dropdownPagination;
-      }
-      else if(this.tag == "sourceInformation") {
+      } else if (this.tag == "sourceInformation") {
         categories = this.sourceInformation;
       }
-      
+
       return categories;
       // var search = this.optionSelected;
       // if (this.optionSelected == null) {
@@ -225,6 +259,7 @@ export default {
   },
   data() {
     return {
+      changeNameCombobox: "",
       arrayCombobox: [],
       content: "",
       fields: {},
@@ -232,7 +267,7 @@ export default {
       isShowDrop: true,
       optionSelected: null,
       isImport: false,
-
+      checkDupliCate: false,
       dropdownPagination: [
         {
           id: 1,

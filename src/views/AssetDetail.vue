@@ -113,7 +113,7 @@
               <label class="m-dialog-label"
                 >Số lượng <span class="requied">*</span></label
               >
-              <div class="m-dialog-combobox">
+              <div class="m-dialog-combobox pg-right-30 m-text-right">
                 <MISAInput
                   :title="'Nhập số lượng'"
                   maxLength="11"
@@ -125,7 +125,7 @@
                   @changeInput="changeInput"
                   @keypress="isNumber($event)"
                   @keyup="upAnDownQuantity($event)"
-                  class="text-right  pg-rg-30"
+                  class="text-right"
                   min="0"
                 />
                 <div class="m-combobox-icon">
@@ -140,12 +140,12 @@
                 </div>
               </div>
             </div>
-            <div class="m-dialog-co mg-right-16 col-4">
+            <div class="m-dialog-col mg-right-16 col-4">
               <label class="m-dialog-label"
                 >Nguyên giá <span class="requied">*</span></label
               >
               <!--    v-bind:value="price" -->
-              <div class="m-dialog-infor-enter">
+              <div class="m-dialog-infor-enter m-text-right">
                 <MISAInput
                   :placeholder="'Nhập nguyên giá'"
                   :title="'Nhập nguyên giá'"
@@ -156,7 +156,7 @@
                   :control="changeFormatPrice"
                   v-model="changeFormatPrice"
                   @changeInput="changeInput"
-                  class=" text-right"
+                  class="text-right"
                   @keypress="isNumber($event)"
                   maxLength="25"
                 />
@@ -166,7 +166,7 @@
               <label class="m-dialog-label"
                 >Số năm sử dụng <span class="requied">*</span></label
               >
-              <div class="m-dialog-infor-enter">
+              <div class="m-dialog-infor-enter m-text-right">
                 <MISAInput
                   :placeholder="'Nhập số năm sử dụng'"
                   :fileName="'Số năm sử dụng'"
@@ -177,7 +177,7 @@
                   :isRequired="true"
                   @changeInput="changeInput"
                   maxLength="11"
-                  class=" text-right"
+                  class="text-right"
                   @keypress="isNumber($event)"
                 />
               </div>
@@ -188,7 +188,7 @@
               <label class="m-dialog-label"
                 >Tỷ lệ hao mòn (%) <span class="requied">*</span></label
               >
-              <div class="m-dialog-combobox">
+              <div class="m-dialog-combobox m-text-right pg-right-30">
                 <!-- :control="asset.DepreciationRate" -->
                 <MISAInput
                   :title="'Nhập tỷ lệ hao mòn'"
@@ -201,7 +201,7 @@
                   v-model="changeDepreciationRate"
                   @changeInput="changeInput"
                   @keypress="isNumber($event)"
-                  class="text-right  pg-rg-30"
+                  :class="'text-right'"
                 />
 
                 <button class="m-combobox-icon icon-top-down"></button>
@@ -211,7 +211,7 @@
               <label class="m-dialog-label"
                 >Giá trị hao mòn năm <span class="requied">*</span></label
               >
-              <div class="m-dialog-infor-enter">
+              <div class="m-dialog-infor-enter m-text-right">
                 <MISAInput
                   :title="'Nhập giá trị hoa mòn năm'"
                   :type="'text'"
@@ -222,7 +222,7 @@
                   v-model="updateWearRate"
                   :control="updateWearRate"
                   @changeInput="changeInput"
-                  class=" text-right"
+                  class="text-right"
                   @keypress="isNumber($event)"
                 />
               </div>
@@ -589,7 +589,7 @@ export default {
             check = true;
           }
         } else {
-          if (         
+          if (
             Number(this.asset.DepreciationRate) !=
             Number(((1 / this.asset.LifeTime) * 100).toFixed(2))
           ) {
@@ -633,7 +633,7 @@ export default {
       this.arrayContainsEmptyName = [];
       // chứa các trường rỗng.
       this.isFieldEmpty = [];
-    
+
       var check = false;
       // Duyệt qua các trường
       for (let property in object) {
@@ -695,9 +695,9 @@ export default {
      */
     checkValidateBackend(statusCode, data, btnName) {
       switch (statusCode) {
-        case 400:
+        case 200:
           // Lấy dữ liệu
-          var errorUserMsg = data.data.data[0];
+          var errorUserMsg = data;
           this.checkShowAlert(errorUserMsg, btnName);
           break;
 
@@ -762,28 +762,38 @@ export default {
       } else {
         // Thêm tài sản
         if (this.enum.Add == this.formMode) {
-          this.asset.CreatedDate = new Date();
-          this.asset.ModifiedDate = new Date();
+          // this.asset.CreatedDate = new Date();
+          // this.asset.ModifiedDate = new Date();
           console.log("Line 748", this.asset.UseDate);
           console.log("Line 749", this.asset.PurchaseDate);
           await axios
             .post("http://localhost:5062/api/v1/FixedAssets", this.asset)
-            .then((res) => {
-              // chọc vào phương thức của TheContent để gọi và sửa thông tin
-              me.$emit("toastMessage", "Lưu dữ liệu thành công");
-              // chọc vào phương thức của TheContent load dữ liệu
-              me.$emit("search");
+            .then((response) => {
+              if (response.data.userMsg) {
+                console.log("abc");
+                var statusCode = response.status;
+                console.log(statusCode);
+                var data = response.data.data.data[0];
+                console.log(data);
+                me.checkValidateBackend(statusCode, data, btnName);
+              } else {
+                // chọc vào phương thức của TheContent để gọi và sửa thông tin
+                me.$emit("toastMessage", "Lưu dữ liệu thành công");
+                // chọc vào phương thức của TheContent load dữ liệu
+                me.$emit("search");
 
-              me.$emit("getData");
+                me.$emit("getData");
 
-              //đưa ra thông báo thành công
-              console.log(res);
+                //đưa ra thông báo thành công
+              }
+
+              console.log(response);
             })
             .catch((response) => {
-              console.log("Line 763", response.response.data);
-              var statusCode = response.request.status;
-              var data = response.response.data;
-              me.checkValidateBackend(statusCode, data, btnName);
+              console.log("Line 763", response);
+              // var statusCode = response.request.status;
+              // var data = response.response.data;
+              // me.checkValidateBackend(statusCode, data, btnName);
 
               //kiểm tra mã lỗi:
             });
@@ -791,24 +801,33 @@ export default {
         // Sửa tài sản
         if (this.enum.Edit == this.formMode) {
           console.log("abc");
-          this.asset.ModifiedDate = new Date();
+          // this.asset.ModifiedDate = new Date();
           await axios
             .put(
               `http://localhost:5062/api/v1/FixedAssets/` +
                 this.assetSelected.FixedAssetId,
               this.assetSelected
             )
-            .then(function () {
-              // chọc vào phương thức của TheContent để gọi và sửa thông tin
-              me.$emit("toastMessage", "Sửa dữ liệu thành công");
-              // reset lại data
-              me.$emit("search");
+            .then(function (response) {
+              if (response.data.userMsg) {
+                console.log("abc");
+                var statusCode = response.status;
+                console.log(statusCode);
+                var data = response.data.data.data[0];
+                console.log(data);
+                me.checkValidateBackend(statusCode, data, btnName);
+              } else {
+                // chọc vào phương thức của TheContent để gọi và sửa thông tin
+                me.$emit("toastMessage", "Sửa dữ liệu thành công");
+                // reset lại data
+                me.$emit("search");
+              }
             })
             .catch(function (response) {
-              console.log("Line 787", response.response.data);
-              var statusCode = response.request.status;
-              var data = response.response.data;
-              me.checkValidateBackend(statusCode, data, btnName);
+              console.log("Line 787", response);
+              // var statusCode = response.request.status;
+              // var data = response.response.data;
+              // me.checkValidateBackend(statusCode, data, btnName);
             });
         }
       }

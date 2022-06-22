@@ -36,8 +36,9 @@
           </div>
           <div class="filter-right">
             <button
+              v-if="showDeleteMulti"
               class="icon-delete mg-right-20"
-              style="display: none"
+              @click="multiDelete"
             ></button>
             <button class="icon-print mg-right-20 tooltip">
               <span class="tooltiptext">In</span>
@@ -50,7 +51,14 @@
           </div>
         </div>
         <div class="grid">
-          <div class="outer">
+          <div
+            class="outer"
+            ref="MainTable"
+            @scroll="
+              this.$refs.FooterTable.scrollLeft =
+                this.$refs.MainTable.scrollLeft
+            "
+          >
             <table>
               <thead>
                 <tr>
@@ -82,7 +90,9 @@
                 <tr
                   v-for="(license, index) in licenses"
                   :key="license.FixedAssetId"
-                  @click="rowOnClickChecked($event, license)"
+                  @click.shift="chooseMultiRow(license)"
+                  @click.ctrl="chooseRowClick(license)"
+                  @click.exact="rowOnClickChecked($event, license)"
                   @dblclick="updateLicenseDetail(license)"
                   :class="license.checked == true ? 'active-selected' : ''"
                 >
@@ -102,7 +112,7 @@
                   <td class="text-right">
                     {{ this.formatSalary(license.Total) }}
                   </td>
-                  <td style="padding-left: 20px">{{ license.Description }}</td>
+                  <td class="textLong" style="padding-left: 20px;max-width:430px">{{ license.Description }}</td>
                   <td class="text-center">
                     <div class="btn-feature">
                       <button
@@ -120,13 +130,20 @@
               </tbody>
             </table>
           </div>
-          <div class="m-table-container">
+          <div
+            class="m-table-container"
+            ref="FooterTable"
+            @scroll="
+              this.$refs.MainTable.scrollLeft =
+                this.$refs.FooterTable.scrollLeft
+            "
+          >
             <table style="width: 100%">
               <tfoot>
                 <tr>
                   <td style="min-width: 584px"></td>
                   <td class="text-right text-bold" style="min-width: 120px">
-                    {{totalCost}}
+                    {{ totalCost }}
                   </td>
                   <td style="min-width: 500px"></td>
                 </tr>
@@ -135,11 +152,14 @@
           </div>
 
           <div class="pagination">
-            <p class="pagination-title">Tổng số: <b>{{this.totalData}}</b> bản ghi</p>
+            <p class="pagination-title">
+              Tổng số: <b>{{ this.totalData }}</b> bản ghi
+            </p>
             <div class="padding-btn-wrap">
               <MISACombobox
                 :tag="'dropdownPagination'"
                 :checkIsEmpty="'checkIsEmpty'"
+                :control="20"
                 @getComboSelected="getPageSize"
               />
               <!-- <span class="padding-sum">20</span>
@@ -237,7 +257,7 @@
                 </tbody>
               </table>
             </div>
-            <div class="m-table-container">
+            <!-- <div class="m-table-container">
               <table style="width: 100%">
                 <tfoot>
                   <tr>
@@ -245,12 +265,13 @@
                   </tr>
                 </tfoot>
               </table>
-            </div>
+            </div> -->
           </div>
         </div>
       </div>
     </div>
     <LicenseDetail
+      ref="licenseDetail"
       v-if="isShowLicenseDetail"
       :licenseSelected="licenseSelected"
       :formMode="formMode"
@@ -298,31 +319,132 @@ export default {
   },
   computed: {
     /**
-    * Mô tả : Tổng nguyên giá
-    * @param
-    * @return
-    * Created by: QuyenNC
-    * Created date: 10:17 16/06/2022
-    */
-    totalCost:function () {
-        var totalCost = this.licenses.reduce((initialValue, currentValue)=> {
-          return initialValue + currentValue.Total
-        },0);
-        return this.formatSalary(totalCost);
+     * Mô tả : Tổng nguyên giá
+     * @param
+     * @return
+     * Created by: QuyenNC
+     * Created date: 10:17 16/06/2022
+     */
+    totalCost: function () {
+      var totalCost = this.licenses.reduce((initialValue, currentValue) => {
+        return initialValue + currentValue.Total;
+      }, 0);
+      return this.formatSalary(totalCost);
     },
     /**
-    * Mô tả : Tổng số trang
-    * @param
-    * @return
-    * Created by: QuyenNC
-    * Created date: 10:17 16/06/2022
-    */
+     * Mô tả : Tổng số trang
+     * @param
+     * @return
+     * Created by: QuyenNC
+     * Created date: 10:17 16/06/2022
+     */
     totalPageSize: function () {
       return Math.ceil(this.totalRecordSearch / this.pageSize);
     },
   },
   props: [""],
   methods: {
+    btnSave() {
+      this.$refs.licenseDetail.btnSaveOnClick();
+
+      this.isAlert = true;
+    },
+    /**
+     * Mô tả : Lọc ra mảng ID để xóa nhiều
+     * @param
+     * @return
+     * Created by: QuyenNC
+     * Created date: 21:53 20/06/2022
+     */
+    multiDelete() {
+      console.log(this.checkAssetList);
+      var filterArray = this.checkAssetList.filter((element) => {
+        return element.checked == true;
+      });
+      console.log("abc", filterArray);
+      this.idToRemove = filterArray.map((element) => {
+        return element.LicenseId;
+      });
+      this.showAlert();
+    },
+    /**
+     * Mô tả : Chọn nhiều dòng băng phím shift
+     * @param
+     * @return
+     * Created by: QuyenNC
+     * Created date: 22:55 16/06/2022
+     */
+    chooseMultiRow(license) {
+      // Lấy vị trí đầu tiên được chọn
+      var indexFirst = this.licenses.indexOf(this.prevChecked);
+      // Lấy vị trí cuối cùng được chọn
+      var indexLast = this.licenses.indexOf(license);
+      if (indexFirst < indexLast) {
+        // Hiện tất cả check từ ô đầu tiên được chọn đến ô cuối được chọn
+        var array = this.licenses.slice(indexFirst, indexLast + 1);
+        array.forEach((element) => {
+          element.checked = true;
+        });
+      } else {
+        var arrayChooseMulti = this.licenses.slice(indexLast, indexFirst);
+        arrayChooseMulti.forEach((element) => {
+          element.checked = true;
+        });
+      }
+      // tắt nút xóa nhiều
+      this.showDeleteMulti = true;
+    },
+
+    /**
+     * Mô tả : Chọn từng dòng giữ phím Ctrl
+     * @param
+     * @return
+     * Created by: QuyenNC
+     * Created date: 23:43 19/06/2022
+     */
+    chooseRowClick(license) {
+    
+      (license.checked = !license.checked), (this.showDeleteMulti = true);
+      var array = this.checkAssetList.filter((element) => {
+        return element.checked == true;
+      });
+      if (array.length == 1) {
+        this.showDeleteMulti = false;
+      }
+      console.log(license);
+    },
+    /**
+     * Mô tả : Kiểm tra xem có checked tất cả hay không
+     * @param
+     * @return
+     * Created by: QuyenNC
+     * Created date: 16:00 26/04/2022
+     */
+    isShowAllChecked() {
+      // kiểm tra xem ô checkbox đầu tiên có check hay không
+      this.isChecked = !this.isChecked;
+    
+      // Nếu bằng true thì add tất cả vào mảng assetList
+      if (this.isChecked) {
+          this.showDeleteMulti = true;
+        this.checkAssetList.filter((license) => {
+          return license.checked == false ? (license.checked = true) : null;
+        });
+        // this.assetList = [...this.assets];
+      } else {
+          this.showDeleteMulti = false;
+        this.checkAssetList.filter((license) => {
+          return license.checked == true ? (license.checked = false) : null;
+        });
+      }
+    },
+    /**
+     * Mô tả : Thay đổi số bản ghi trên 1 trang
+     * @param
+     * @return
+     * Created by: QuyenNC
+     * Created date: 16:32 16/06/2022
+     */
     async getPageSize(value) {
       // Thay đổi số sản phẩm trên 1 trang
       this.pageSize = value.itemData.pageSize;
@@ -336,26 +458,22 @@ export default {
      * Created by: QuyenNC
      * Created date: 16:14 27/04/2022
      */
-    showAlert() {
+    showAlert(licenseCode) {
       this.formMode = "";
-
-      this.assetList = this.checkAssetList.filter((license) => {
-        return license.checked == true;
-      });
 
       // Hiện hoặc tắt alert
       this.isAlert = !this.isAlert;
       // Nếu assetList có phần khi ta bấm check.
-      if (this.assetList.length != 0) {
+      if (this.idToRemove.length != 0) {
         // Nếu trong mảng có 1 phàn tử khi Goi hàm toastAlert kèm thông tin
-        if (this.assetList.length === 1) {
+        if (this.idToRemove.length === 1) {
           this.toastAlert(
-            `Bạn có muốn xóa chứng từ << ${this.assetList[0].LicenseCode}>>?`,
+            `Bạn có muốn xóa chứng từ có mã ${licenseCode}?`,
             "remove"
           );
         } else {
           this.toastAlert(
-            this.assetList.length +
+            this.idToRemove.length +
               " chứng từ đã được chọn. Bạn có muốn xóa các chứng từ này khỏi danh sách không?",
             "remove"
           );
@@ -375,41 +493,36 @@ export default {
      * Created date: 17:25 25/04/2022
      */
     async btnOnClickDelete() {
-      console.log();
+     
       // đưa formMode về rỗng khi xóa.
       var me = this;
       // Tắt alert
       this.isAlert = true;
-      // Lấy ra 1 mảng danh sách các id
-      this.arrayLicenseId = this.checkAssetList.filter((license) => {
-        return license.checked == true;
-      });
-      console.log(this.arrayLicenseId);
+     
       // Nếu mảng có 1 phần tử gọi api xóa 1
-      if (this.arrayLicenseId.length == 1) {
+      if (this.idToRemove.length == 1) {
+        console.log("quyen",this.idToRemove[0]);
         await axios
-          .delete(
-            `http://localhost:5062/api/v1/Licenses/` +
-              this.arrayLicenseId[0].LicenseId
-          )
+          .delete(`http://localhost:5062/api/v1/Licenses/` + this.idToRemove[0])
           .then(function () {
             // Loading lại dữ liệu
             me.search();
             me.getData();
-            me.getAssetFilterFromLicense(me.arrayLicenseId[0]);
+            me.getAssetFilterFromLicense(me.idToRemove[0]);
             // Gọi đến hàm xử lý toastMessage
             me.toastMessage("Xóa dữ liệu thành công");
           })
           .catch(function (response) {
-            console.log(response);
+            console.log(response.response.data);
             me.toastMessage("Xóa dữ liệu thất bại");
           });
       }
       // Nếu mảng lớn hơn 1 thì gọi api xóa nhiều và truyền mảng id.
       else {
+        console.log("abcde", this.arrayLicenseId);
         await axios
           .delete("http://localhost:5062/api/v1/Licenses/deleteMultiple", {
-            data: JSON.stringify(this.arrayLicenseId),
+            data: JSON.stringify(this.idToRemove),
             headers: {
               "content-type": "application/json",
             },
@@ -424,6 +537,7 @@ export default {
             me.toastMessage("Xóa dữ liệu thất bại");
           });
       }
+      this.showDeleteMulti = false;
     },
     /**
      * Mô tả : Sửa chứng từ và chi tiết chứng từ
@@ -436,46 +550,50 @@ export default {
       // resetForm
       var me = this;
       this.formMode = 2;
-      this.titlePage = 'Sửa chứng từ ghi tăng'
+      this.titlePage = "Sửa chứng từ ghi tăng";
       // Tự động sinh mã mới
       // Hiện thị from LicenseDetail
 
       await axios
-        .get("http://localhost:5062/api/v1/Licenses/" + license.LicenseId)
+        .get(
+          "http://localhost:5062/api/v1/FixedAssets/getAssetFromLicense/" +
+            license.LicenseId
+        )
         .then(function (res) {
-          console.log(res);
-          me.licenseSelected = res.data;
-          me.arrayAssetSelected = me.licenseDetailAsset;
+          // Lưu mảng các license
+          me.licenseSelected = res.data.license;
+          // Lưu mảng chi tiết các chứng từ
+          me.arrayAssetSelected = res.data.detailAssets;
         })
         .catch(function (res) {
-          console.log(res);
+          console.log(res.response.data);
         });
       this.isShowLicenseDetail = true;
-      console.log(this.licenseDetailAsset);
     },
-   
+
     /**
-    * Mô tả : Lấy ra các tài sản theo chứng từ.
-    * @param
-    * @return
-    * Created by: QuyenNC
-    * Created date: 10:06 16/06/2022
-    */
-    getAssetFilterFromLicense(license) {
+     * Mô tả : Lấy ra các tài sản theo chứng từ.
+     * @param
+     * @return
+     * Created by: QuyenNC
+     * Created date: 10:06 16/06/2022
+     */
+    getAssetFilterFromLicense(licenseId) {
       var me = this;
       axios
         .get(
-          "http://localhost:5062/api/v1/FixedAssets/getAssetFromLicense/" + license.LicenseId
+          "http://localhost:5062/api/v1/FixedAssets/getAssetFromLicense/" +
+            licenseId
         )
         .then(function (response) {
-          me.licenseDetailAsset = response.data;
+          me.licenseDetailAsset = response.data.detailAssets;
         })
         .catch(function (response) {
           console.log(response);
         });
     },
 
-     /**
+    /**
      * Mô tả : Kiểm tra xem có phần tử trong aray hay không ?
      * @param
      * @return
@@ -488,18 +606,32 @@ export default {
         this.updateLicenseDetail(license);
         // kiểm tra xem có class delete k;
       } else if ($event.target.classList.contains("delete")) {
-        this.showAlert();
+        this.idToRemove = [license.LicenseId];
+        this.showAlert(license.LicenseCode);
         //
       } else {
         if (license.checked == false) {
+          // đưa các phần từ có checked = false
           this.checkAssetList.forEach((element) => {
             element.checked = false;
           });
+          // Lưu dòng chọn đầu tiên
+          this.prevChecked = license;
           license.checked = true;
-          this.getAssetFilterFromLicense(license);
+          // Tắt xóa nhiều
+          this.showDeleteMulti = false;
+          // Gọi hàm chi tiết chứng từ
+          this.getAssetFilterFromLicense(license.LicenseId);
         } else {
           license.checked = false;
           this.isChecked = false;
+          var array =  this.checkAssetList.filter((element)=> {
+              return element.checked ==true;
+         })
+         if(array.length == 1) {
+          this.showDeleteMulti = false;
+         }
+          this.licenseDetailAsset = [];
         }
       }
     },
@@ -546,13 +678,13 @@ export default {
      * Created by: QuyenNC
      * Created date: 16:34 21/05/2022
      */
-      searchLicense() {
+    searchLicense() {
       // clear timout
       clearTimeout(this.timeOut);
       // Lấy giá trị input
       this.changeValue = this.$refs.searchInput.value;
 
-       this.pageIndex = 1;
+      this.pageIndex = 1;
       // đặt timeout và gọi hàm tìm kiếm
       this.timeOut = setTimeout(this.search, 1000);
     },
@@ -589,7 +721,7 @@ export default {
           });
 
           me.totalRecordSearch = response.data.totalRecord;
-          console.log(me.totalRecordSearch);
+
           // tắt loading khi có dữ liệu trả về
           me.isLoadingData(false);
         })
@@ -614,14 +746,6 @@ export default {
         .get("http://localhost:5062/api/v1/Licenses")
         .then(function (res) {
           me.totalData = res.data.length;
-          // // ẩn loading
-          // me.isLoadingData(false);
-
-          // me.checkAssetList = res.data;
-          // // Thêm checked vào các element
-          // res.data.forEach((element) => {
-          //   element.checked = false;
-          // });
         })
         .catch(function (response) {
           console.log(response);
@@ -657,7 +781,7 @@ export default {
       // resetForm
       this.resetForm();
 
-      this.titlePage = 'Thêm chứng từ ghi tăng'
+      this.titlePage = "Thêm chứng từ ghi tăng";
       this.formMode = 1;
       // Tự động sinh mã mới
       await this.createNewAssetCode();
@@ -764,15 +888,19 @@ export default {
   },
   data() {
     return {
+      idToRemove: "",
+      showDeleteMulti: false,
+      assetList: [],
+      prevChecked: {},
       // Lưu mảng array khi chọn chứng từ
       arrayAssetSelected: [],
 
       // Lọc dữ liệu
-      changeValue:null,
+      changeValue: null,
       // Tổng số lượng bản ghi
       totalData: 0,
       // Tổng dữ liệu đê chia số trang
-      totalRecordSearch:0,
+      totalRecordSearch: 0,
       // Lưu mảng dữ liệu đầu vào
       licenses: [],
       // Mảng thông tin chi tiết về license

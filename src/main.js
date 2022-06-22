@@ -10,6 +10,7 @@ import MISALoading from "./components/base/MISALoading.vue";
 import MISAInput from "./components/base/MISAInput.vue";
 import MISACombobox from "./components/base/MISACombobox.vue";
 import MISADatepicker from "./components/base/MISADatepicker.vue"
+import MISALicenseInput from "./components/base/MISALicenseInput.vue"
 import router from "./router/index"
 import store from "./router/store"
 
@@ -28,6 +29,7 @@ app.component("MISALoading",MISALoading);
 app.component("MISACombobox",MISACombobox);
 app.component("MISAInput",MISAInput);
 app.component("MISADatepicker",MISADatepicker);
+app.component("MISALicenseInput",MISALicenseInput);
 
 
 app.use(router);

@@ -81,6 +81,10 @@ body {
   margin-top: 16px;
 }
 
+.mg-top-18 {
+  margin-top: 18px;
+}
+
 .mg-right-16 {
   margin-right: 16px;
 }
@@ -99,6 +103,10 @@ body {
 
 .mg-bottom-8 {
   margin-bottom: 8px;
+}
+
+.mg-bottom-20 {
+  margin-bottom: 20px;
 }
 
 .pg-left-20 {
@@ -224,4 +232,8 @@ a {
   margin-top: 4px;
   display: block;
   color: #ff4747;
+}
+
+.showOpacity {
+  opacity: 1 !important;
 }

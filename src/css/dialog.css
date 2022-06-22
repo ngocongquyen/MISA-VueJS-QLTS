@@ -2,6 +2,13 @@
     display: block;
 }
 
+.m-text-right input {
+    text-align: right;
+}
+
+.pg-right-30 input {
+    padding-right:30px
+}
 .m-dialog {
     background-color: #fff;
     box-sizing: border-box;
